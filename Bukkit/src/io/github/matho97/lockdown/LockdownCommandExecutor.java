@@ -86,7 +86,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					sender.sendMessage(lockdown + ChatColor.GREEN + "Config has been reloaded!");
 					return true;
 				} else if (args[0].equalsIgnoreCase("on")){
-					if (args.length == 2){
+					if (args.length <= 2){
 						sender.sendMessage(notenough);
 						return false;
 					} else if (args.length == 4){
