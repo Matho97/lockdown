@@ -3,7 +3,7 @@ main: io.github.matho97.lockdown.Lockdown
 version: 0.1.0
 commands:
   lockdown:
-    description: Get a list of banned players
+    description: Commands for lockdown.
     usage: Usage /lockdown help
     permission: lockdown.lockdown.execute
     permission-message: You don't have access to lockdown.lockdown.execute

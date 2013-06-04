@@ -25,8 +25,13 @@ public class LockdownCommandExecutor implements CommandExecutor{
 		if (cmd.getName().equalsIgnoreCase("lockdown")){
 			//Player target = Bukkit.getPlayerExact(args[0]);
 			if (args.length == 0){
-				sender.sendMessage(notenough);
-				return false;
+				sender.sendMessage(ChatColor.RED + "----------------" + ChatColor.WHITE + " Lockdown Help Page " + ChatColor.RED + "----------------");
+				sender.sendMessage("/lockdown" + ChatColor.YELLOW + " - Shows this help page.");
+				sender.sendMessage("/lockdown set <1|2>" + ChatColor.YELLOW + " - Sets the 2 warp points, 1 is the prison, 2 is when it's over.");
+				sender.sendMessage("/lockdown reload" + ChatColor.YELLOW + " - Reloads the configuration files.");
+				sender.sendMessage("/lockdown on <amount of time> <s|m>" + ChatColor.YELLOW + " - Sets the prison into lockdown mode, s = seconds, m = minutes");
+				//sender.sendMessage("");
+				return true;
 			}
 				if (args[0].equalsIgnoreCase("set")){
 					Player player = sender.getServer().getPlayer(sender.getName());
@@ -131,8 +136,6 @@ public class LockdownCommandExecutor implements CommandExecutor{
 						BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 20);
 						return true;
 					}
-				} else if (args[0].equalsIgnoreCase("help")){
-					sender.sendMessage("");
 				}
 				return false;
 				
@@ -147,7 +150,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 				*/
 			
 			
-		}
+		} //end of lockdown command
 		 //If this has happened the function will return true. 
 	        // If this hasn't happened the a value of false will be returned.
 		return false; 
