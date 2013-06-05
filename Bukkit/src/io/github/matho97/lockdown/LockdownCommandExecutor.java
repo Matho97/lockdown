@@ -26,46 +26,46 @@ public class LockdownCommandExecutor implements CommandExecutor{
 		 * Stores the command methods
 		 */
 		if (cmd.getName().equalsIgnoreCase("lockdown")){
-			//Player target = Bukkit.getPlayerExact(args[0]);
-			if (args.length == 0){
-				sender.sendMessage(ChatColor.RED + "----------------" + ChatColor.WHITE + " Lockdown Help Page " + ChatColor.RED + "----------------");
-				sender.sendMessage("/lockdown" + ChatColor.YELLOW + " - Shows this help page.");
-				sender.sendMessage("/lockdown set <1|2>" + ChatColor.YELLOW + " - Sets the 2 warp points, 1 is the prison, 2 is when it's over.");
-				sender.sendMessage("/lockdown reload" + ChatColor.YELLOW + " - Reloads the configuration files.");
-				sender.sendMessage("/lockdown on <amount of time> <s|m>" + ChatColor.YELLOW + " - Sets the prison into lockdown mode, s = seconds, m = minutes");
-				//sender.sendMessage("");
-				return true;
-			}
+				//Player target = Bukkit.getPlayerExact(args[0]);
+				if (args.length == 0){
+					sender.sendMessage(ChatColor.RED + "----------------" + ChatColor.WHITE + " Lockdown Help Page " + ChatColor.RED + "----------------");
+					sender.sendMessage("/lockdown" + ChatColor.YELLOW + " - Shows this help page.");
+					sender.sendMessage("/lockdown set <1|2>" + ChatColor.YELLOW + " - Sets the 2 warp points, 1 is the prison, 2 is when it's over.");
+					sender.sendMessage("/lockdown reload" + ChatColor.YELLOW + " - Reloads the configuration files.");
+					sender.sendMessage("/lockdown on <amount of time> <s|m>" + ChatColor.YELLOW + " - Sets the prison into lockdown mode, s = seconds, m = minutes");
+					//sender.sendMessage("");
+					return true;
+				}
 				if (args[0].equalsIgnoreCase("set")){
 					Player player = sender.getServer().getPlayer(sender.getName());
 					//if (!(args.length < 1)){
-						if(args.length == 1){
-							sender.sendMessage(notenough);
-							return false;
-						} else if (args.length == 3){
-							sender.sendMessage(toomany);
-							return false;
-						}
-						
-						if (args[1].equalsIgnoreCase("1")){
-							String x = Double.toString(player.getLocation().getX());
-							String y = Double.toString(player.getLocation().getY());
-							String z = Double.toString(player.getLocation().getZ());
+					if(args.length == 1){
+						sender.sendMessage(notenough);
+						return false;
+					} else if (args.length == 3){
+						sender.sendMessage(toomany);
+						return false;
+					}
+					
+					if (args[1].equalsIgnoreCase("1")){
+						String x = Double.toString(player.getLocation().getX());
+						String y = Double.toString(player.getLocation().getY());
+						String z = Double.toString(player.getLocation().getZ());
 							
-							plugin.getConfig().set(plugin.location1 + ".X", x.substring(0, 3));
-							plugin.getConfig().set(plugin.location1 + ".Y", y.substring(0, 3));
-							plugin.getConfig().set(plugin.location1 + ".Z", z.substring(0, 3));
-							plugin.saveConfig();
-							sender.sendMessage(lockdown + ChatColor.RED + "Location 1 has been set at " + ChatColor.GREEN + x.substring(0, 3) + ", " + y.substring(0, 3) + ", " + z.substring(0, 3));
-							/*double x = Double.parseDouble(args[1]);
-							double y = Double.parseDouble(args[2]);
-							double z = Double.parseDouble(args[3]);
-							for(Player players : Bukkit.getOnlinePlayers()){
-								Location teleportloc = new Location(Bukkit.getWorld("world"), x, y, z);
+						plugin.getConfig().set(plugin.location1 + ".X", x.substring(0, 3));
+						plugin.getConfig().set(plugin.location1 + ".Y", y.substring(0, 3));
+						plugin.getConfig().set(plugin.location1 + ".Z", z.substring(0, 3));
+						plugin.saveConfig();
+						sender.sendMessage(lockdown + ChatColor.RED + "Location 1 has been set at " + ChatColor.GREEN + x.substring(0, 3) + ", " + y.substring(0, 3) + ", " + z.substring(0, 3));
+						/*double x = Double.parseDouble(args[1]);
+						double y = Double.parseDouble(args[2]);
+						double z = Double.parseDouble(args[3]);
+						for(Player players : Bukkit.getOnlinePlayers()){
+							Location teleportloc = new Location(Bukkit.getWorld("world"), x, y, z);
 								
-								players.teleport(teleportloc);
-							}*/
-							return true;
+							players.teleport(teleportloc);
+						}*/
+						return true;
 						} else if (args[1].equalsIgnoreCase("2")){
 							String x = Double.toString(player.getLocation().getX());
 							String y = Double.toString(player.getLocation().getY());
@@ -151,26 +151,24 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 20);
 							return true;
 						}
-						}
-					} else {						
-						sender.sendMessage(lockdown + "The argument " + "'" + args[2] + "'" + " is not accepted!");
-						sender.sendMessage(lockdown + "Use 's' for seconds and 'm' for minutes");
-						return true;
+					}
+				} else {						
+					sender.sendMessage(lockdown + "The argument " + "'" + args[2] + "'" + " is not accepted!");
+					sender.sendMessage(lockdown + "Use 's' for seconds and 'm' for minutes");
+					return true;
 					}
 				}
 				return false;
-				
+					
 				/*if (args.length < 1) {
-			    	sender.sendMessage("Not enough arguments!");
-			    	return false;
-			    } else {
-			    
+				   	sender.sendMessage("Not enough arguments!");
+				   	return false;
+				} else {
+				  
 				
 				sender.sendMessage("adwadwa");
 				return true;
 				*/
-			
-			
 		} //end of lockdown command
 		 //If this has happened the function will return true. 
 	        // If this hasn't happened the a value of false will be returned.
