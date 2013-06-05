@@ -39,7 +39,7 @@ public class LockdownTask extends BukkitRunnable {
 				players.teleport(teleportloc);
 			}
 		}
-        plugin.getServer().broadcastMessage(lockdown + ChatColor.RED + "The prison lockdown is now over!");
+        plugin.getServer().broadcastMessage(lockdown + ChatColor.GREEN + "The prison lockdown is now over!");
     }
  
 }
