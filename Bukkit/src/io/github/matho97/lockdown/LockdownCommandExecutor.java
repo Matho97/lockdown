@@ -92,48 +92,49 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					} else if (args.length == 4){
 						sender.sendMessage(toomany);
 						return false;
-					} else if (args[2] != "s"||args[2] != "m"){
-						sender.sendMessage(lockdown + "The argument '" + args[2] + "' is not accepted!");
+					} else if (args[2].equalsIgnoreCase("s")|| args[2].equalsIgnoreCase("m")){
+						//sender.sendMessage("Teleporting players!");
+					    String sx = plugin.getConfig().getString(plugin.location1 + ".X");
+						String sy = plugin.getConfig().getString(plugin.location1 + ".Y");
+						String sz = plugin.getConfig().getString(plugin.location1 + ".Z");
+						
+						double x = Double.parseDouble(sx);
+						double y = Double.parseDouble(sy);
+						double z = Double.parseDouble(sz);
+						for(Player players : Bukkit.getOnlinePlayers()){
+							Location teleportloc = new Location(Bukkit.getWorld("world"), x, y, z);
+							
+							players.teleport(teleportloc);
+						}
+						Bukkit.broadcastMessage(lockdown + ChatColor.BLUE + "Prison has been put into lockdown, you will not be able to leave this area!");
+						int delay;
+						if (args[1] == null){
+							delay = 5;
+						} else {
+							delay = Integer.parseInt(args[1]);
+						}
+						
+						//@SuppressWarnings("unused")
+						//BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, sleep * 20);
+						if (args[2] == null){
+							sender.sendMessage(lockdown + "You need to choose if you want the delay in seconds or minutes! s or m.");
+							return true;
+						} else if (args[2].equalsIgnoreCase("m")){
+							sender.sendMessage(lockdown + "Server has been put in lockdown for " + delay + " minute(s).");
+							
+							@SuppressWarnings("unused")
+							BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 1200);
+							return true;
+						} else if (args[2].equalsIgnoreCase("s")){
+							sender.sendMessage(lockdown + "Server has been put in lockdown for " + delay + " second(s).");
+							
+							@SuppressWarnings("unused")
+							BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 20);
+							return true;
+						}
+					} else {						
+						sender.sendMessage(lockdown + "The argument " + "'" + args[2] + "'" + " is not accepted!");
 						sender.sendMessage(lockdown + "Use 's' for seconds and 'm' for minutes");
-						return true;
-					}
-					//sender.sendMessage("Teleporting players!");
-				    String sx = plugin.getConfig().getString(plugin.location1 + ".X");
-					String sy = plugin.getConfig().getString(plugin.location1 + ".Y");
-					String sz = plugin.getConfig().getString(plugin.location1 + ".Z");
-					
-					double x = Double.parseDouble(sx);
-					double y = Double.parseDouble(sy);
-					double z = Double.parseDouble(sz);
-					for(Player players : Bukkit.getOnlinePlayers()){
-						Location teleportloc = new Location(Bukkit.getWorld("world"), x, y, z);
-						
-						players.teleport(teleportloc);
-					}
-					Bukkit.broadcastMessage(lockdown + ChatColor.BLUE + "Prison has been put into lockdown, you will not be able to leave this area!");
-					int delay;
-					if (args[1] == null){
-						delay = 5;
-					} else {
-						delay = Integer.parseInt(args[1]);
-					}
-					
-					//@SuppressWarnings("unused")
-					//BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, sleep * 20);
-					if (args[2] == null){
-						sender.sendMessage(lockdown + "You need to choose if you want the delay in seconds or minutes! s or m.");
-						return true;
-					} else if (args[2].equalsIgnoreCase("m")){
-						sender.sendMessage(lockdown + "Server has been put in lockdown for " + delay + " minute(s).");
-						
-						@SuppressWarnings("unused")
-						BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 1200);
-						return true;
-					} else if (args[2].equalsIgnoreCase("s")){
-						sender.sendMessage(lockdown + "Server has been put in lockdown for " + delay + " second(s).");
-						
-						@SuppressWarnings("unused")
-						BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 20);
 						return true;
 					}
 				}
