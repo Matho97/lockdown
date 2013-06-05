@@ -1,13 +1,19 @@
 name: Lockdown
 main: io.github.matho97.lockdown.Lockdown
-version: 1.0.0
+version: 1.0.1
 commands:
   lockdown:
     description: Commands for lockdown.
     usage: Usage /lockdown
-    permission: lockdown.lockdown.execute
-    permission-message: You don't have access to lockdown.lockdown.execute
+    permission: lockdown
+    permission-message: You don't have access to 'Lockdown'
     aliases: [ld, lockd, ldown]
 permissions:
-    lockdown.lockdown.immune:
-      default: op
+  lockdown.execute:
+   default: op
+  lockdown.reload:
+   default: op
+  lockdown.set:
+   default: op
+  lockdown.immune:
+    default: op

@@ -35,7 +35,7 @@ public class LockdownTask extends BukkitRunnable {
 		for(Player players : Bukkit.getOnlinePlayers()){
 			Location teleportloc = new Location(players.getWorld(), px, py, pz, yaw, pitch);
 			
-			if(!(players.hasPermission("lockdown.lockdown.immune"))){
+			if((players.hasPermission("lockdown.immune"))){
 				players.teleport(teleportloc);
 			}
 		}
