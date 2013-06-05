@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+//import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 public class LockdownCommandExecutor implements CommandExecutor{
@@ -16,12 +17,14 @@ public class LockdownCommandExecutor implements CommandExecutor{
 	public String notenough = lockdown + ChatColor.YELLOW + "Not enough arguments!";
 	public String toomany = lockdown + ChatColor.YELLOW + "Too many arguments!";
 	
+	public boolean ldtask = false;
+	
 	public LockdownCommandExecutor(Lockdown plugin) {
 		this.plugin = plugin;
 	}
 	
 	@Override	
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
+	public boolean onCommand(final CommandSender sender, Command cmd, String label, final String[] args){
 		/**
 		 * Stores the command methods
 		 */
@@ -32,6 +35,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					sender.sendMessage("/lockdown set <1|2>" + ChatColor.YELLOW + " - Sets the 2 warp points, 1 is the prison, 2 is when it's over.");
 					sender.sendMessage("/lockdown reload" + ChatColor.YELLOW + " - Reloads the configuration files.");
 					sender.sendMessage("/lockdown on <amount of time> <s|m>" + ChatColor.YELLOW + " - Sets the prison into lockdown mode, s = seconds, m = minutes");
+					sender.sendMessage("/lockdown off" + ChatColor.YELLOW + " - Cancels the lockdown.");
 					//sender.sendMessage("");
 					return true;
 				}
@@ -183,6 +187,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							} else if (args[2].equalsIgnoreCase("s")){
 								Bukkit.broadcastMessage(lockdown + ChatColor.GRAY + "Server has been put in lockdown for " + delay + " second(s).");
 								
+								ldtask = true;
 								@SuppressWarnings("unused")
 								BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 20);
 								return true;
@@ -194,8 +199,30 @@ public class LockdownCommandExecutor implements CommandExecutor{
 						return true;
 						}
 					}
+				 } else
+				/**
+				 * Turns off lockdown
+				 */
+				if(args[0].equalsIgnoreCase("off")){
+					if(sender.hasPermission("lockdown.execute")){
+						if(args.length == 1){
+							if (ldtask == true){
+								ldtask = false;
+								for (Player players : Bukkit.getServer().getOnlinePlayers()){
+									players.sendMessage(lockdown + "Lockdown has been canceled by " + ChatColor.RED + sender.getName());
+									return true;
+								}
+							} else
+							sender.sendMessage(lockdown + "The prison is not in lockdown!");
+							return true;
+						} else
+						sender.sendMessage(toomany);
+						sender.sendMessage("Usage: /lockdown off");
+						return true;
 				}
 				return false;
+			}
+			return false;
 		} //end of lockdown command
 		 //If this has happened the function will return true. 
 	        // If this hasn't happened the a value of false will be returned.
