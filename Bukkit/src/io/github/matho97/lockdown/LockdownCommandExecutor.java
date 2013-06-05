@@ -93,10 +93,22 @@ public class LockdownCommandExecutor implements CommandExecutor{
 						sender.sendMessage(toomany);
 						return false;
 					} else if (args[2].equalsIgnoreCase("s")|| args[2].equalsIgnoreCase("m")){
+						/**
+						 * Sets the teleport coordinates and teleports all online players
+						 */
 						//sender.sendMessage("Teleporting players!");
 					    String sx = plugin.getConfig().getString(plugin.location1 + ".X");
 						String sy = plugin.getConfig().getString(plugin.location1 + ".Y");
 						String sz = plugin.getConfig().getString(plugin.location1 + ".Z");
+					    String px = plugin.getConfig().getString(plugin.location2 + ".X");
+						String py = plugin.getConfig().getString(plugin.location2 + ".Y");
+						String pz = plugin.getConfig().getString(plugin.location2 + ".Z");
+						
+						if(sx == null||sy == null||sz == null ||px == null||py == null||pz == null){
+							sender.sendMessage(lockdown + "You have not set all of the teleportation points!");
+							sender.sendMessage(lockdown + "Do /lockdown set 1 and /lockdown set 2, to set the 2 teleportation points.");
+							return true;
+						} else {
 						
 						double x = Double.parseDouble(sx);
 						double y = Double.parseDouble(sy);
@@ -114,8 +126,9 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							delay = Integer.parseInt(args[1]);
 						}
 						
-						//@SuppressWarnings("unused")
-						//BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, sleep * 20);
+						/***
+						 * Sets the delay and message before executing the second teleportation 
+						 */
 						if (args[2] == null){
 							sender.sendMessage(lockdown + "You need to choose if you want the delay in seconds or minutes! s or m.");
 							return true;
@@ -131,6 +144,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							@SuppressWarnings("unused")
 							BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 20);
 							return true;
+						}
 						}
 					} else {						
 						sender.sendMessage(lockdown + "The argument " + "'" + args[2] + "'" + " is not accepted!");
