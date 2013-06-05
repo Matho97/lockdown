@@ -9,4 +9,4 @@ commands:
     permission-message: You don't have access to lockdown.lockdown.execute
 permissions:
     lockdown.lockdown.immune:
-      default: op  
+      default: op

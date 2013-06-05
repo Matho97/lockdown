@@ -22,6 +22,9 @@ public class LockdownCommandExecutor implements CommandExecutor{
 	
 	@Override	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
+		/**
+		 * Stores the command methods
+		 */
 		if (cmd.getName().equalsIgnoreCase("lockdown")){
 			//Player target = Bukkit.getPlayerExact(args[0]);
 			if (args.length == 0){
@@ -100,6 +103,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					    String sx = plugin.getConfig().getString(plugin.location1 + ".X");
 						String sy = plugin.getConfig().getString(plugin.location1 + ".Y");
 						String sz = plugin.getConfig().getString(plugin.location1 + ".Z");
+						
 					    String px = plugin.getConfig().getString(plugin.location2 + ".X");
 						String py = plugin.getConfig().getString(plugin.location2 + ".Y");
 						String pz = plugin.getConfig().getString(plugin.location2 + ".Z");
@@ -116,9 +120,11 @@ public class LockdownCommandExecutor implements CommandExecutor{
 						for(Player players : Bukkit.getOnlinePlayers()){
 							Location teleportloc = new Location(Bukkit.getWorld("world"), x, y, z);
 							
-							players.teleport(teleportloc);
+							if(!(players.hasPermission("lockdown.lockdown.immune"))){
+								players.teleport(teleportloc);
+							}
 						}
-						Bukkit.broadcastMessage(lockdown + ChatColor.BLUE + "Prison has been put into lockdown, you will not be able to leave this area!");
+						Bukkit.broadcastMessage(lockdown + ChatColor.BLUE + "The prison is now under lockdown, you will not be able to leave this area!");
 						int delay;
 						if (args[1] == null){
 							delay = 5;

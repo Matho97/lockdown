@@ -27,7 +27,9 @@ public class LockdownTask extends BukkitRunnable {
 		for(Player players : Bukkit.getOnlinePlayers()){
 			Location teleportloc = new Location(Bukkit.getWorld("world"), x, y, z);
 			
-			players.teleport(teleportloc);
+			if(!(players.hasPermission("lockdown.lockdown.immune"))){
+				players.teleport(teleportloc);
+			}
 		}
         plugin.getServer().broadcastMessage(lockdown + ChatColor.RED + "The prison lockdown is now over!");
     }
