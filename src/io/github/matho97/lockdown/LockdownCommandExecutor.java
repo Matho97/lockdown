@@ -17,9 +17,18 @@ public class LockdownCommandExecutor implements CommandExecutor{
 	public String lockdown = ChatColor.RED + "[" + ChatColor.GOLD + "LockDown" + ChatColor.RED + "] " + ChatColor.WHITE;
 	public String notenough = lockdown + ChatColor.YELLOW + "Not enough arguments!";
 	public String toomany = lockdown + ChatColor.YELLOW + "Too many arguments!";
+	// Easier chat coloring during string broadcasts and such. Seeing as we do it so much in here ;)
+	public ChatColor red = ChatColor.RED;
+	public ChatColor yellow = ChatColor.YELLOW;
+	public ChatColor green = ChatColor.GREEN;
+	public ChatColor white = ChatColor.WHITE;
+	public ChatColor purple = ChatColor.LIGHT_PURPLE;
+	public ChatColor darkpurple = ChatColor.DARK_PURPLE;
+	public ChatColor gold = ChatColor.GOLD;
 
 	public boolean ldtask = false;
 	public boolean ldtimer = false;
+	public boolean ldscheduler = false;
 	
 	public int delay;
 	public int count = 0;
@@ -35,12 +44,12 @@ public class LockdownCommandExecutor implements CommandExecutor{
 		 */
 		if (cmd.getName().equalsIgnoreCase("lockdown")){
 				if (args.length == 0){
-					sender.sendMessage(ChatColor.GOLD + "----------------- " + lockdown + ChatColor.WHITE + " Help Page " + ChatColor.GOLD + "----------------");
-					sender.sendMessage("/lockdown" + ChatColor.YELLOW + " - Shows this help page.");
-					sender.sendMessage("/lockdown set <1|2>" + ChatColor.YELLOW + " - Sets the 2 warp points, 1 is the prison, 2 is when it's over.");
-					sender.sendMessage("/lockdown reload" + ChatColor.YELLOW + " - Reloads the configuration files.");
-					sender.sendMessage("/lockdown on <amount of time> <s|m>" + ChatColor.YELLOW + " - Sets the prison into lockdown mode, s = seconds, m = minutes");
-					sender.sendMessage("/lockdown off" + ChatColor.YELLOW + " - Cancels the lockdown.");
+					sender.sendMessage(gold + "----------------- " + lockdown + ChatColor.WHITE + " Help Page " + gold + "----------------");
+					sender.sendMessage("/lockdown" + yellow + " - Shows this help page.");
+					sender.sendMessage("/lockdown set <1|2>" + yellow + " - Sets the 2 warp points, 1 is the prison, 2 is when it's over.");
+					sender.sendMessage("/lockdown reload" + yellow + " - Reloads the configuration files.");
+					sender.sendMessage("/lockdown on <amount of time> <s|m>" + yellow + " - Sets the prison into lockdown mode, s = seconds, m = minutes");
+					sender.sendMessage("/lockdown off" + yellow + " - Cancels the lockdown.");
 					//sender.sendMessage("");
 					return true;
 				}
@@ -92,7 +101,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							String posY = y.toString();
 							String posZ = z.toString();
 							
-							sender.sendMessage(lockdown + ChatColor.LIGHT_PURPLE + "Location 1 has been set at " + ChatColor.GREEN + posX.substring(0, 3) + ", " + posY.substring(0, 3) + ", " + posZ.substring(0, 3));
+							sender.sendMessage(lockdown + purple + "Location 1 has been set at " + green + posX.substring(0, 3) + ", " + posY.substring(0, 3) + ", " + posZ.substring(0, 3));
 							
 							return true;
 						} else 
@@ -128,7 +137,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							String posY = y.toString();
 							String posZ = z.toString();
 								
-							sender.sendMessage(lockdown + ChatColor.LIGHT_PURPLE + "Location 2 has been set at " + ChatColor.GREEN + posX.substring(0, 3) + ", " + posY.substring(0, 3) + ", " + posZ.substring(0, 3));
+							sender.sendMessage(lockdown + purple + "Location 2 has been set at " + green + posX.substring(0, 3) + ", " + posY.substring(0, 3) + ", " + posZ.substring(0, 3));
 							return true;
 						}
 					}
@@ -144,7 +153,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							return true;
 						}
 						plugin.reloadConfig();
-						sender.sendMessage(lockdown + ChatColor.GREEN + "Config has been reloaded!");
+						sender.sendMessage(lockdown + green + "Configuration has been reloaded successfully!");
 						return true;
 					}
 				} else
@@ -155,11 +164,11 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					if(sender.hasPermission("lockdown.execute")){
 						if (args.length <= 2){
 							sender.sendMessage(notenough);
-							sender.sendMessage(lockdown + "Usage: /lockdown on <time> <s|m>");
+							sender.sendMessage(lockdown + "Usage: /lockdown on <amount of time> <s|m>");
 							return true;
 						} else if (args.length == 4){
 							sender.sendMessage(toomany);
-							sender.sendMessage(lockdown + "Usage: /lockdown on <time> <s|m>");
+							sender.sendMessage(lockdown + "Usage: /lockdown on <amount of time> <s|m>");
 							return true;
 						} else if (args[2].equalsIgnoreCase("s")|| args[2].equalsIgnoreCase("m")){
 							/**
@@ -186,6 +195,9 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							if(sx == null||sy == null||sz == null ||px == null||py == null||pz == null){
 								sender.sendMessage(lockdown + "You have not set all of the teleportation points!");
 								sender.sendMessage(lockdown + "Do /lockdown set 1 and /lockdown set 2, to set the 2 teleportation points.");
+								sender.sendMessage(lockdown + "===== Also, Remember: =====");
+								sender.sendMessage(lockdown + "Point 1 is where users tp to during lockdown!");
+								sender.sendMessage(lockdown + "Point 2 is where users tp to " + red + "AFTER " + ChatColor.WHITE +  "lockdown!");
 								return true;
 							} else {
 							
@@ -197,7 +209,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 									players.teleport(teleportloc);
 								}
 							}
-							Bukkit.broadcastMessage(lockdown + ChatColor.YELLOW + "The prison is now under lockdown, you will not be able to leave this area!");
+							Bukkit.broadcastMessage(lockdown + yellow + "The prison is now under lockdown, you will not be able to leave this area!");
 							
 							if (args[1] == null){
 								delay = 5;
@@ -243,7 +255,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							if (ldtask == true){
 								ldtask = false;
 								for (Player players : Bukkit.getServer().getOnlinePlayers()){
-									players.sendMessage(lockdown + "Lockdown has been canceled by " + ChatColor.RED + sender.getName());
+									players.sendMessage(lockdown + "Lockdown has been canceled by " + red + sender.getName());
 									return true;
 								}
 							} else
