@@ -3,6 +3,7 @@ package io.github.matho97.lockdown;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,6 +22,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 	public boolean ldtimer = false;
 	
 	public int delay;
+	public int count = 0;
 	
 	public LockdownCommandExecutor(Lockdown plugin) {
 		this.plugin = plugin;
@@ -62,18 +64,29 @@ public class LockdownCommandExecutor implements CommandExecutor{
 						 * Sets location one
 						 */
 						if (args[1].equalsIgnoreCase("1")){
-							Double x = (player.getLocation().getX());
-							Double y = (player.getLocation().getY());
-							Double z = (player.getLocation().getZ());
-							Float pitch = (player.getLocation().getPitch());
-							Float yaw = (player.getLocation().getYaw());
+							
+							Double x = player.getLocation().getX();
+							Double y = player.getLocation().getY();
+							Double z = player.getLocation().getZ();
+							
+							Float pitch = player.getLocation().getPitch();
+							Float yaw = player.getLocation().getYaw();
+							
+							//Location spawn = player.getBedSpawnLocation();
 							
 							plugin.getConfig().set(plugin.location1 + ".X", x);
 							plugin.getConfig().set(plugin.location1 + ".Y", y);
 							plugin.getConfig().set(plugin.location1 + ".Z", z);
+							
 							plugin.getConfig().set(plugin.location1 + ".Pitch", pitch);
 							plugin.getConfig().set(plugin.location1 + ".Yaw", yaw);
+							
+							plugin.getConfig().set(plugin.spawn1 + ".X", x);
+							plugin.getConfig().set(plugin.spawn1 + ".Y", y);
+							plugin.getConfig().set(plugin.spawn1 + ".Z", z);
+							
 							plugin.saveConfig();
+
 	
 							String posX = x.toString();
 							String posY = y.toString();
@@ -87,17 +100,28 @@ public class LockdownCommandExecutor implements CommandExecutor{
 						 * Sets location two
 						 */
 						if (args[1].equalsIgnoreCase("2")){
+							World world = player.getWorld();
 							Double x = (player.getLocation().getX());
 							Double y = (player.getLocation().getY());
 							Double z = (player.getLocation().getZ());
 							Float pitch = (player.getLocation().getPitch());
 							Float yaw = (player.getLocation().getYaw());
 							
+							Location spawn = world.getSpawnLocation();
+							Double spawnX = spawn.getX();
+							Double spawnY = spawn.getY();
+							Double spawnZ = spawn.getZ();
+							
 							plugin.getConfig().set(plugin.location2 + ".X", x);
 							plugin.getConfig().set(plugin.location2 + ".Y", y);
 							plugin.getConfig().set(plugin.location2 + ".Z", z);
 							plugin.getConfig().set(plugin.location2 + ".Pitch", pitch);
 							plugin.getConfig().set(plugin.location2 + ".Yaw", yaw);
+							
+							plugin.getConfig().set(plugin.spawn2 + ".X", spawnX);
+							plugin.getConfig().set(plugin.spawn2 + ".Y", spawnY);
+							plugin.getConfig().set(plugin.spawn2 + ".Z", spawnZ);
+							
 							plugin.saveConfig();
 	
 							String posX = x.toString();
@@ -144,8 +168,13 @@ public class LockdownCommandExecutor implements CommandExecutor{
 						    Double sx = plugin.getConfig().getDouble(plugin.location1 + ".X");
 						    Double sy = plugin.getConfig().getDouble(plugin.location1 + ".Y");
 						    Double sz = plugin.getConfig().getDouble(plugin.location1 + ".Z");
+						    
 						    Double spitch = plugin.getConfig().getDouble(plugin.location1 + ".Pitch");
 						    Double syaw = plugin.getConfig().getDouble(plugin.location1 + ".Yaw");
+						    
+						    Double spawnX = plugin.getConfig().getDouble(plugin.spawn1 + ".X");
+						    Double spawnY = plugin.getConfig().getDouble(plugin.spawn1 + ".Y");
+						    Double spawnZ = plugin.getConfig().getDouble(plugin.spawn1 + ".Z");
 						    
 						    Float pitch = spitch.floatValue();
 							Float yaw = syaw.floatValue();
@@ -164,6 +193,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 								Location teleportloc = new Location(players.getWorld(), sx, sy, sz, yaw, pitch);
 								
 								if((players.hasPermission("lockdown.immune"))){
+									players.setBedSpawnLocation(new Location(players.getWorld(), spawnX, spawnY, spawnZ), true);
 									players.teleport(teleportloc);
 								}
 							}
@@ -225,19 +255,9 @@ public class LockdownCommandExecutor implements CommandExecutor{
 						return true;
 					}
 					return false;
-				} else
-				if(args[0].equalsIgnoreCase("time")){
-					if(sender.hasPermission("lockdown.timeleft")){
-						if(args.length == 1){
-							
-							
-							
-						} else
-						sender.sendMessage(toomany);
-						sender.sendMessage("Usage: /lockdown off");
-						return true;						
-					}
-					return false;
+				} else if (args[0].equalsIgnoreCase("something")){
+					
+					return true;
 				}
 			return false;
 		} //end of lockdown command

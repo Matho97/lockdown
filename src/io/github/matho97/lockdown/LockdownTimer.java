@@ -1,5 +1,6 @@
 package io.github.matho97.lockdown;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -17,7 +18,7 @@ public class LockdownTimer extends BukkitRunnable {
 	private int count = 0;
  
     public void run() {
-    	while(ldce.ldtimer == true){
+    	if (ldce.ldtimer == true){
     		if (count == ldce.delay) {
     			
     			
@@ -25,6 +26,7 @@ public class LockdownTimer extends BukkitRunnable {
 		    	return;
 	    	}
 	    	//End game
+    		Bukkit.broadcastMessage(Integer.toString(count));
 	    	count++;
 	    		 
     	} 
