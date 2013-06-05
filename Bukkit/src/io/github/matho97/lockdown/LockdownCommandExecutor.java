@@ -16,8 +16,11 @@ public class LockdownCommandExecutor implements CommandExecutor{
 	public String lockdown = ChatColor.RED + "[" + ChatColor.GOLD + "LockDown" + ChatColor.RED + "] " + ChatColor.WHITE;
 	public String notenough = lockdown + ChatColor.YELLOW + "Not enough arguments!";
 	public String toomany = lockdown + ChatColor.YELLOW + "Too many arguments!";
-	
+
 	public boolean ldtask = false;
+	public boolean ldtimer = false;
+	
+	public int delay;
 	
 	public LockdownCommandExecutor(Lockdown plugin) {
 		this.plugin = plugin;
@@ -30,7 +33,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 		 */
 		if (cmd.getName().equalsIgnoreCase("lockdown")){
 				if (args.length == 0){
-					sender.sendMessage(ChatColor.RED + "----------------" + ChatColor.WHITE + " Lockdown Help Page " + ChatColor.RED + "----------------");
+					sender.sendMessage(ChatColor.GOLD + "----------------- " + lockdown + ChatColor.WHITE + " Help Page " + ChatColor.GOLD + "----------------");
 					sender.sendMessage("/lockdown" + ChatColor.YELLOW + " - Shows this help page.");
 					sender.sendMessage("/lockdown set <1|2>" + ChatColor.YELLOW + " - Sets the 2 warp points, 1 is the prison, 2 is when it's over.");
 					sender.sendMessage("/lockdown reload" + ChatColor.YELLOW + " - Reloads the configuration files.");
@@ -165,7 +168,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 								}
 							}
 							Bukkit.broadcastMessage(lockdown + ChatColor.YELLOW + "The prison is now under lockdown, you will not be able to leave this area!");
-							int delay;
+							
 							if (args[1] == null){
 								delay = 5;
 							} else {
