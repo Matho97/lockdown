@@ -17,25 +17,26 @@ public class LockdownTask extends BukkitRunnable {
     }
  
     public void run() {
-    	String sx = plugin.getConfig().getString("Lockdown.Location 2.X");
-		String sy = plugin.getConfig().getString("Lockdown.Location 2.Y");
-		String sz = plugin.getConfig().getString("Lockdown.Location 2.Z");
-		String spitch = plugin.getConfig().getString("Lockdown.Location 2.Pitch");
-		String syaw = plugin.getConfig().getString("Lockdown.Location 2.Yaw");
+    	Double px = plugin.getConfig().getDouble("Lockdown.Location 2.X");
+    	Double py = plugin.getConfig().getDouble("Lockdown.Location 2.Y");
+    	Double pz = plugin.getConfig().getDouble("Lockdown.Location 2.Z");
+    	Double ppitch = plugin.getConfig().getDouble("Lockdown.Location 2.Pitch");
+    	Double pyaw = plugin.getConfig().getDouble("Lockdown.Location 2.Yaw");
+
+		Float pitch = ppitch.floatValue();
+		Float yaw = pyaw.floatValue();
 		
-		double x = Double.parseDouble(sx);
+		/*double x = Double.parseDouble(sx);
 		double y = Double.parseDouble(sy);
 		double z = Double.parseDouble(sz);
 		float pitch = Float.parseFloat(spitch);
-		float yaw = Float.parseFloat(syaw);
+		float yaw = Float.parseFloat(syaw);*/
 		
 		for(Player players : Bukkit.getOnlinePlayers()){
-			Location teleportloc = new Location(players.getWorld(), x, y, z);
+			Location teleportloc = new Location(players.getWorld(), px, py, pz, yaw, pitch);
 			
 			if(!(players.hasPermission("lockdown.lockdown.immune"))){
 				players.teleport(teleportloc);
-				players.getPlayer().getLocation().setPitch(pitch);
-				players.getPlayer().getLocation().setYaw(yaw);
 			}
 		}
         plugin.getServer().broadcastMessage(lockdown + ChatColor.RED + "The prison lockdown is now over!");

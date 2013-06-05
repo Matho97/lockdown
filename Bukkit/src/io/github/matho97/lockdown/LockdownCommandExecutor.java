@@ -26,7 +26,6 @@ public class LockdownCommandExecutor implements CommandExecutor{
 		 * Stores the command methods
 		 */
 		if (cmd.getName().equalsIgnoreCase("lockdown")){
-				//Player target = Bukkit.getPlayerExact(args[0]);
 				if (args.length == 0){
 					sender.sendMessage(ChatColor.RED + "----------------" + ChatColor.WHITE + " Lockdown Help Page " + ChatColor.RED + "----------------");
 					sender.sendMessage("/lockdown" + ChatColor.YELLOW + " - Shows this help page.");
@@ -36,9 +35,11 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					//sender.sendMessage("");
 					return true;
 				}
+				/**
+				 * Sets the two locations needed for the teleportation
+				 */
 				if (args[0].equalsIgnoreCase("set")){
 					Player player = sender.getServer().getPlayer(sender.getName());
-					//if (!(args.length < 1)){
 					if(args.length == 1){
 						sender.sendMessage(notenough);
 						return false;
@@ -46,57 +47,71 @@ public class LockdownCommandExecutor implements CommandExecutor{
 						sender.sendMessage(toomany);
 						return false;
 					}
-					
+					/**
+					 * Sets location one
+					 */
 					if (args[1].equalsIgnoreCase("1")){
-						String x = Double.toString(player.getLocation().getX());
-						String y = Double.toString(player.getLocation().getY());
-						String z = Double.toString(player.getLocation().getZ());
-						String pitch = Float.toString(player.getLocation().getPitch());
-						String yaw = Float.toString(player.getLocation().getYaw());
-							
-						plugin.getConfig().set(plugin.location1 + ".X", x.substring(0, 3));
-						plugin.getConfig().set(plugin.location1 + ".Y", y.substring(0, 3));
-						plugin.getConfig().set(plugin.location1 + ".Z", z.substring(0, 3));
+						Double x = (player.getLocation().getX());
+						Double y = (player.getLocation().getY());
+						Double z = (player.getLocation().getZ());
+						Float pitch = (player.getLocation().getPitch());
+						Float yaw = (player.getLocation().getYaw());
+						
+						plugin.getConfig().set(plugin.location1 + ".X", x);
+						plugin.getConfig().set(plugin.location1 + ".Y", y);
+						plugin.getConfig().set(plugin.location1 + ".Z", z);
 						plugin.getConfig().set(plugin.location1 + ".Pitch", pitch);
 						plugin.getConfig().set(plugin.location1 + ".Yaw", yaw);
 						plugin.saveConfig();
-						sender.sendMessage(lockdown + ChatColor.RED + "Location 1 has been set at " + ChatColor.GREEN + x.substring(0, 3) + ", " + y.substring(0, 3) + ", " + z.substring(0, 3));
-						/*double x = Double.parseDouble(args[1]);
-						double y = Double.parseDouble(args[2]);
-						double z = Double.parseDouble(args[3]);
-						for(Player players : Bukkit.getOnlinePlayers()){
-							Location teleportloc = new Location(Bukkit.getWorld("world"), x, y, z);
-								
-							players.teleport(teleportloc);
-						}*/
+
+						String posX = x.toString();
+						String posY = y.toString();
+						String posZ = z.toString();
+						
+						sender.sendMessage(lockdown + ChatColor.RED + "Location 1 has been set at " + ChatColor.GREEN + posX.substring(0, 3) + ", " + posY.substring(0, 3) + ", " + posZ.substring(0, 3));
+						
 						return true;
-						} else if (args[1].equalsIgnoreCase("2")){
-							String x = Double.toString(player.getLocation().getX());
-							String y = Double.toString(player.getLocation().getY());
-							String z = Double.toString(player.getLocation().getZ());
-							String pitch = Float.toString(player.getLocation().getPitch());
-							String yaw = Float.toString(player.getLocation().getYaw());
+						} else 
+						/**
+						 * Sets location two
+						 */
+						if (args[1].equalsIgnoreCase("2")){
+							Double x = (player.getLocation().getX());
+							Double y = (player.getLocation().getY());
+							Double z = (player.getLocation().getZ());
+							Float pitch = (player.getLocation().getPitch());
+							Float yaw = (player.getLocation().getYaw());
 							
-							plugin.getConfig().set(plugin.location2 + ".X", x.substring(0, 3));
-							plugin.getConfig().set(plugin.location2 + ".Y", y.substring(0, 3));
-							plugin.getConfig().set(plugin.location2 + ".Z", z.substring(0, 3));
+							plugin.getConfig().set(plugin.location2 + ".X", x);
+							plugin.getConfig().set(plugin.location2 + ".Y", y);
+							plugin.getConfig().set(plugin.location2 + ".Z", z);
 							plugin.getConfig().set(plugin.location2 + ".Pitch", pitch);
 							plugin.getConfig().set(plugin.location2 + ".Yaw", yaw);
 							plugin.saveConfig();
-							sender.sendMessage(lockdown + ChatColor.RED + "Location 2 has been set at " + ChatColor.GREEN + x.substring(0, 3) + ", " + y.substring(0, 3) + ", " + z.substring(0, 3));
+
+							String posX = x.toString();
+							String posY = y.toString();
+							String posZ = z.toString();
+							
+							sender.sendMessage(lockdown + ChatColor.RED + "Location 2 has been set at " + ChatColor.GREEN + posX.substring(0, 3) + ", " + posY.substring(0, 3) + ", " + posZ.substring(0, 3));
 							return true;
 						}
-					//}
-					//sender.sendMessage("Not enough arguments!");
-					//return false;
-				} else if (args[0].equalsIgnoreCase("reload")){
+				} else
+				/**
+				 * Reloads the configuration file
+				 */
+				if (args[0].equalsIgnoreCase("reload")){
 					if (args.length == 2){
 						sender.sendMessage(toomany);
 					}
 					plugin.reloadConfig();
 					sender.sendMessage(lockdown + ChatColor.GREEN + "Config has been reloaded!");
 					return true;
-				} else if (args[0].equalsIgnoreCase("on")){
+				} else
+				/**
+				 * Turns on lockdown	
+				 */
+				if (args[0].equalsIgnoreCase("on")){
 					if (args.length <= 2){
 						sender.sendMessage(notenough);
 						return false;
@@ -107,16 +122,18 @@ public class LockdownCommandExecutor implements CommandExecutor{
 						/**
 						 * Sets the teleport coordinates and teleports all online players
 						 */
-						//sender.sendMessage("Teleporting players!");
-					    String sx = plugin.getConfig().getString(plugin.location1 + ".X");
-						String sy = plugin.getConfig().getString(plugin.location1 + ".Y");
-						String sz = plugin.getConfig().getString(plugin.location1 + ".Z");
-						String spitch = plugin.getConfig().getString(plugin.location1 + ".Pitch");
-						String syaw = plugin.getConfig().getString(plugin.location1 + ".Yaw");
+					    Double sx = plugin.getConfig().getDouble(plugin.location1 + ".X");
+					    Double sy = plugin.getConfig().getDouble(plugin.location1 + ".Y");
+					    Double sz = plugin.getConfig().getDouble(plugin.location1 + ".Z");
+					    Double spitch = plugin.getConfig().getDouble(plugin.location1 + ".Pitch");
+					    Double syaw = plugin.getConfig().getDouble(plugin.location1 + ".Yaw");
+					    
+					    Float pitch = spitch.floatValue();
+						Float yaw = syaw.floatValue();
 						
-					    String px = plugin.getConfig().getString(plugin.location2 + ".X");
-						String py = plugin.getConfig().getString(plugin.location2 + ".Y");
-						String pz = plugin.getConfig().getString(plugin.location2 + ".Z");
+						Double px = plugin.getConfig().getDouble(plugin.location2 + ".X");
+						Double py = plugin.getConfig().getDouble(plugin.location2 + ".Y");
+						Double pz = plugin.getConfig().getDouble(plugin.location2 + ".Z");
 						
 						if(sx == null||sy == null||sz == null ||px == null||py == null||pz == null){
 							sender.sendMessage(lockdown + "You have not set all of the teleportation points!");
@@ -124,20 +141,11 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							return true;
 						} else {
 						
-						
-						double x = Double.parseDouble(sx);
-						double y = Double.parseDouble(sy);
-						double z = Double.parseDouble(sz);
-						float pitch = Float.parseFloat(spitch);
-						float yaw = Float.parseFloat(syaw);
-						
 						for(Player players : Bukkit.getOnlinePlayers()){
-							Location teleportloc = new Location(players.getWorld(), x, y, z);
+							Location teleportloc = new Location(players.getWorld(), sx, sy, sz, yaw, pitch);
 							
 							if(!(players.hasPermission("lockdown.lockdown.immune"))){
 								players.teleport(teleportloc);
-								players.getPlayer().getLocation().setPitch(pitch);
-								players.getPlayer().getLocation().setYaw(yaw);
 							}
 						}
 						Bukkit.broadcastMessage(lockdown + ChatColor.BLUE + "The prison is now under lockdown, you will not be able to leave this area!");
@@ -175,16 +183,6 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					}
 				}
 				return false;
-					
-				/*if (args.length < 1) {
-				   	sender.sendMessage("Not enough arguments!");
-				   	return false;
-				} else {
-				  
-				
-				sender.sendMessage("adwadwa");
-				return true;
-				*/
 		} //end of lockdown command
 		 //If this has happened the function will return true. 
 	        // If this hasn't happened the a value of false will be returned.

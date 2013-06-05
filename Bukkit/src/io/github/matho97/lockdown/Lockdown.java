@@ -7,7 +7,6 @@ public class Lockdown extends JavaPlugin{
 
 	public String location1 = "Lockdown.Location 1";
 	public String location2 = "Lockdown.Location 2";
-	public String world = "Lockdown.World";
 	@Override
 	public void onEnable(){
 		loadConfiguration();
@@ -20,7 +19,6 @@ public class Lockdown extends JavaPlugin{
 	     //See "Creating you're defaults"
 		getConfig().addDefault(location1, "");
 		getConfig().addDefault(location2, "");
-		getConfig().addDefault(world, "");
 	    getConfig().options().copyDefaults(true); // NOTE: You do not have to use "plugin." if the class extends the java plugin
 	    //Save the config whenever you manipulate it
 	    saveConfig();
