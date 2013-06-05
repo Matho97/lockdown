@@ -4,9 +4,10 @@ version: 1.0.0
 commands:
   lockdown:
     description: Commands for lockdown.
-    usage: Usage /lockdown help
+    usage: Usage /lockdown
     permission: lockdown.lockdown.execute
     permission-message: You don't have access to lockdown.lockdown.execute
+    aliases: [ld, lockd, ldown]
 permissions:
     lockdown.lockdown.immune:
       default: op

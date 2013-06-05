@@ -51,10 +51,14 @@ public class LockdownCommandExecutor implements CommandExecutor{
 						String x = Double.toString(player.getLocation().getX());
 						String y = Double.toString(player.getLocation().getY());
 						String z = Double.toString(player.getLocation().getZ());
+						String pitch = Float.toString(player.getLocation().getPitch());
+						String yaw = Float.toString(player.getLocation().getYaw());
 							
 						plugin.getConfig().set(plugin.location1 + ".X", x.substring(0, 3));
 						plugin.getConfig().set(plugin.location1 + ".Y", y.substring(0, 3));
 						plugin.getConfig().set(plugin.location1 + ".Z", z.substring(0, 3));
+						plugin.getConfig().set(plugin.location1 + ".Pitch", pitch);
+						plugin.getConfig().set(plugin.location1 + ".Yaw", yaw);
 						plugin.saveConfig();
 						sender.sendMessage(lockdown + ChatColor.RED + "Location 1 has been set at " + ChatColor.GREEN + x.substring(0, 3) + ", " + y.substring(0, 3) + ", " + z.substring(0, 3));
 						/*double x = Double.parseDouble(args[1]);
@@ -70,10 +74,14 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							String x = Double.toString(player.getLocation().getX());
 							String y = Double.toString(player.getLocation().getY());
 							String z = Double.toString(player.getLocation().getZ());
+							String pitch = Float.toString(player.getLocation().getPitch());
+							String yaw = Float.toString(player.getLocation().getYaw());
 							
 							plugin.getConfig().set(plugin.location2 + ".X", x.substring(0, 3));
 							plugin.getConfig().set(plugin.location2 + ".Y", y.substring(0, 3));
 							plugin.getConfig().set(plugin.location2 + ".Z", z.substring(0, 3));
+							plugin.getConfig().set(plugin.location2 + ".Pitch", pitch);
+							plugin.getConfig().set(plugin.location2 + ".Yaw", yaw);
 							plugin.saveConfig();
 							sender.sendMessage(lockdown + ChatColor.RED + "Location 2 has been set at " + ChatColor.GREEN + x.substring(0, 3) + ", " + y.substring(0, 3) + ", " + z.substring(0, 3));
 							return true;
@@ -103,6 +111,8 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					    String sx = plugin.getConfig().getString(plugin.location1 + ".X");
 						String sy = plugin.getConfig().getString(plugin.location1 + ".Y");
 						String sz = plugin.getConfig().getString(plugin.location1 + ".Z");
+						String spitch = plugin.getConfig().getString(plugin.location1 + ".Pitch");
+						String syaw = plugin.getConfig().getString(plugin.location1 + ".Yaw");
 						
 					    String px = plugin.getConfig().getString(plugin.location2 + ".X");
 						String py = plugin.getConfig().getString(plugin.location2 + ".Y");
@@ -114,14 +124,20 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							return true;
 						} else {
 						
+						
 						double x = Double.parseDouble(sx);
 						double y = Double.parseDouble(sy);
 						double z = Double.parseDouble(sz);
+						float pitch = Float.parseFloat(spitch);
+						float yaw = Float.parseFloat(syaw);
+						
 						for(Player players : Bukkit.getOnlinePlayers()){
-							Location teleportloc = new Location(Bukkit.getWorld("world"), x, y, z);
+							Location teleportloc = new Location(players.getWorld(), x, y, z);
 							
 							if(!(players.hasPermission("lockdown.lockdown.immune"))){
 								players.teleport(teleportloc);
+								players.getPlayer().getLocation().setPitch(pitch);
+								players.getPlayer().getLocation().setYaw(yaw);
 							}
 						}
 						Bukkit.broadcastMessage(lockdown + ChatColor.BLUE + "The prison is now under lockdown, you will not be able to leave this area!");
@@ -139,13 +155,13 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							sender.sendMessage(lockdown + "You need to choose if you want the delay in seconds or minutes! s or m.");
 							return true;
 						} else if (args[2].equalsIgnoreCase("m")){
-							sender.sendMessage(lockdown + "Server has been put in lockdown for " + delay + " minute(s).");
+							Bukkit.broadcastMessage(lockdown + "Server has been put in lockdown for " + delay + " minute(s).");
 							
 							@SuppressWarnings("unused")
 							BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 1200);
 							return true;
 						} else if (args[2].equalsIgnoreCase("s")){
-							sender.sendMessage(lockdown + "Server has been put in lockdown for " + delay + " second(s).");
+							Bukkit.broadcastMessage(lockdown + "Server has been put in lockdown for " + delay + " second(s).");
 							
 							@SuppressWarnings("unused")
 							BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 20);
