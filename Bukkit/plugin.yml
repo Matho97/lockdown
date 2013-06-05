@@ -15,5 +15,7 @@ permissions:
    default: op
   lockdown.set:
    default: op
+  lockdown.timeleft:
+   default: op
   lockdown.immune:
     default: op

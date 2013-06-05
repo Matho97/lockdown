@@ -180,7 +180,8 @@ public class LockdownCommandExecutor implements CommandExecutor{
 								return true;
 							} else if (args[2].equalsIgnoreCase("m")){
 								Bukkit.broadcastMessage(lockdown + ChatColor.GRAY + "Server has been put in lockdown for " + delay + " minute(s).");
-								
+
+								ldtask = true;
 								@SuppressWarnings("unused")
 								BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 1200);
 								return true;
@@ -219,9 +220,22 @@ public class LockdownCommandExecutor implements CommandExecutor{
 						sender.sendMessage(toomany);
 						sender.sendMessage("Usage: /lockdown off");
 						return true;
+					}
+					return false;
+				} else
+				if(args[0].equalsIgnoreCase("time")){
+					if(sender.hasPermission("lockdown.timeleft")){
+						if(args.length == 1){
+							
+							
+							
+						} else
+						sender.sendMessage(toomany);
+						sender.sendMessage("Usage: /lockdown off");
+						return true;						
+					}
+					return false;
 				}
-				return false;
-			}
 			return false;
 		} //end of lockdown command
 		 //If this has happened the function will return true. 
