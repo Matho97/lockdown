@@ -54,7 +54,7 @@ public class LockdownScheduler extends BukkitRunnable {
     	auto = plugin.getConfig().getBoolean("Lockdown.Auto delay.On");
 
     	if (auto == true){
-        	Bukkit.broadcastMessage(Integer.toString(count));
+        	//Bukkit.broadcastMessage(Integer.toString(count));
 	    	if(count == 0){
 				Double sx = plugin.getConfig().getDouble("Lockdown.Location 1.X");
 		    	Double sy = plugin.getConfig().getDouble("Lockdown.Location 1.Y");
@@ -77,8 +77,9 @@ public class LockdownScheduler extends BukkitRunnable {
 						players.setBedSpawnLocation(new Location(players.getWorld(), spawnX, spawnY, spawnZ), true);
 						players.teleport(teleportloc);
 					}
+					players.sendMessage(lockdown + yellow + "The prison is now under lockdown, you will not be able to leave this area!");
 				}
-				plugin.getServer().broadcastMessage(lockdown + yellow + "The prison is now under lockdown, you will not be able to leave this area!");
+				
 	    	} else if (count == delay) {
 	    		Double px = plugin.getConfig().getDouble("Lockdown.Location 2.X");
 	    	   	Double py = plugin.getConfig().getDouble("Lockdown.Location 2.Y");
@@ -101,11 +102,9 @@ public class LockdownScheduler extends BukkitRunnable {
 	    				players.setBedSpawnLocation(new Location(players.getWorld(), spawnX2, spawnY2, spawnZ2), true);
 	    				players.teleport(teleportloc);
 	    			}
+		    		players.sendMessage(lockdown + green + "The prison lockdown is now over!");
 	    		}
-	    		plugin.getServer().broadcastMessage(lockdown + green + "The prison lockdown is now over!");
-	    		plugin.getServer().broadcast(lockdown, lockdown);
-	    			
-			    //this.cancel();
+	    		
 	    		count = 1 - delay;
 			    return;
 		    }

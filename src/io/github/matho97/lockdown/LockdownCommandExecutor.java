@@ -15,7 +15,6 @@ import org.bukkit.scheduler.BukkitTask;
 public class LockdownCommandExecutor implements CommandExecutor{
 
 	private Lockdown plugin;
-	private LockdownTask ldt;
 	
 	// Easier chat coloring during string broadcasts and such. Seeing as we do it so much in here ;)
 	public ChatColor
@@ -222,7 +221,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 								sender.sendMessage(lockdown + "Do /lockdown set 1 and /lockdown set 2, to set the 2 teleportation points.");
 								sender.sendMessage(lockdown + "===== Also, Remember: =====");
 								sender.sendMessage(lockdown + "Point 1 is where users tp to during lockdown!");
-								sender.sendMessage(lockdown + "Point 2 is where users tp to " + red + "AFTER " + ChatColor.WHITE +  "lockdown!");
+								sender.sendMessage(lockdown + "Point 2 is where users tp to " + red + "AFTER " + white +  "lockdown!");
 								return true;
 							} else {
 							
@@ -233,8 +232,8 @@ public class LockdownCommandExecutor implements CommandExecutor{
 									players.setBedSpawnLocation(new Location(players.getWorld(), spawnX, spawnY, spawnZ), true);
 									players.teleport(teleportloc);
 								}
+								players.sendMessage(lockdown + yellow + "The prison is now under lockdown, you will not be able to leave this area!");
 							}
-							plugin.getServer().broadcastMessage(lockdown + yellow + "The prison is now under lockdown, you will not be able to leave this area!");
 							
 							if (args[1] == null){
 								delay = 5;
@@ -249,18 +248,18 @@ public class LockdownCommandExecutor implements CommandExecutor{
 								sender.sendMessage(lockdown + "You need to choose if you want the delay in seconds or minutes! s or m.");
 								return true;
 							} else if (args[2].equalsIgnoreCase("m")){
-								plugin.getServer().broadcastMessage(lockdown + ChatColor.GRAY + "Server has been put in lockdown for " + delay + " minute(s).");
-
-								ldt.ldtask = true;
+								for(Player players : Bukkit.getOnlinePlayers()){
+									players.sendMessage(lockdown + gray + "Server has been put in lockdown for " + delay + " minute(s).");
+								}
+								plugin.getConfig().set("Lockdown.On", true);
 								@SuppressWarnings("unused")
 								BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 1200);
 								return true;
 							} else if (args[2].equalsIgnoreCase("s")){
-								plugin.getServer().broadcastMessage(lockdown + ChatColor.GRAY + "Server has been put in lockdown for " + delay + " second(s).");
-								
-								
-								
-								ldtask = true;
+								for(Player players : Bukkit.getOnlinePlayers()){
+									players.sendMessage(lockdown + gray + "Server has been put in lockdown for " + delay + " second(s).");
+								}
+								plugin.getConfig().set("Lockdown.On", true);
 								@SuppressWarnings("unused")
 								BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 20);
 								//ldt.ldtask = false;
@@ -280,19 +279,19 @@ public class LockdownCommandExecutor implements CommandExecutor{
 				if(args[0].equalsIgnoreCase("auto")){
 					if (args[1].equalsIgnoreCase("off")){
 						//BukkitTask autoTask = new LockdownScheduler(plugin).runTaskTimer(plugin, 0L, 20L);
-						int d = 0;
+						/*int d = 0;
 						
 						for(int i = 0; i < 10; i++){
 							d++;
 							sender.sendMessage(Integer.toString(d));
 						}
 						int left = 10 - d;
-						sender.sendMessage(Integer.toString(left));
+						sender.sendMessage(Integer.toString(left));*/
 						
-						/*plugin.getConfig().set("Lockdown.Auto delay.On", false);
+						plugin.getConfig().set("Lockdown.Auto delay.On", false);
 						plugin.saveConfig();
 						
-						sender.sendMessage("Canceled!");*/
+						sender.sendMessage("Canceled!");
 						return true;
 					}
 					int autoDelay = Integer.parseInt(args[1]);  
@@ -311,8 +310,12 @@ public class LockdownCommandExecutor implements CommandExecutor{
 				if(args[0].equalsIgnoreCase("off")){
 					if(sender.hasPermission("lockdown.execute")){
 						if(args.length == 1){
-							if (ldt.ldtask == true){
-								ldt.ldtask = false;
+					    	ldtask = plugin.getConfig().getBoolean("Lockdown.On");
+					    	
+							if (ldtask == true){
+								plugin.getConfig().set("Lockdown.On", false);
+								
+								
 								for (Player players : Bukkit.getServer().getOnlinePlayers()){
 									players.sendMessage(lockdown + "Lockdown has been canceled by " + red + sender.getName());
 									return true;

@@ -10,7 +10,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class LockdownTask extends BukkitRunnable {
  
     private final JavaPlugin plugin;
-	private LockdownCommandExecutor ldce;
 	
 	// Easier chat coloring during string broadcasts and such. Seeing as we do it so much in here ;)
 	public ChatColor
@@ -47,7 +46,8 @@ public class LockdownTask extends BukkitRunnable {
     }
  
     public void run() {
-    	ldtask = true;
+    	ldtask = plugin.getConfig().getBoolean("Lockdown.On");
+    	
     	if (ldtask == true){
 	    	Double px = plugin.getConfig().getDouble("Lockdown.Location 2.X");
 	    	Double py = plugin.getConfig().getDouble("Lockdown.Location 2.Y");
@@ -69,12 +69,12 @@ public class LockdownTask extends BukkitRunnable {
 				if(!(players.hasPermission("lockdown.immune"))){
 					players.setBedSpawnLocation(new Location(players.getWorld(), spawnX, spawnY, spawnZ), true);
 					players.teleport(teleportloc);
+					players.sendMessage(lockdown + green + "The prison lockdown is now over!");
 				}
+				players.sendMessage(lockdown + green + "The prison lockdown is now over!");
 			}
-	        plugin.getServer().broadcastMessage(lockdown + green + "The prison lockdown is now over!");
-	        //ldce.ldtask = false;
-    	} if (ldce.ldtask == false){
-    		plugin.getServer().broadcastMessage(lockdown + green + "Canceled!");
+
+			plugin.getConfig().set("Lockdown.On", false);
     	}
     }
 }
