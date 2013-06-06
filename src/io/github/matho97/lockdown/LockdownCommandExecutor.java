@@ -26,6 +26,10 @@ public class LockdownCommandExecutor implements CommandExecutor{
 	public ChatColor darkpurple = ChatColor.DARK_PURPLE;
 	public ChatColor gold = ChatColor.GOLD;
 
+	private LockdownTask ldt;
+	@SuppressWarnings("unused")
+	private LockdownScheduler lds;
+	
 	public boolean ldtask = false;
 	public boolean ldtimer = false;
 	public boolean ldscheduler = false;
@@ -204,12 +208,12 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							for(Player players : Bukkit.getOnlinePlayers()){
 								Location teleportloc = new Location(players.getWorld(), sx, sy, sz, yaw, pitch);
 								
-								if((players.hasPermission("lockdown.immune"))){
+								if(!(players.hasPermission("lockdown.immune"))){
 									players.setBedSpawnLocation(new Location(players.getWorld(), spawnX, spawnY, spawnZ), true);
 									players.teleport(teleportloc);
 								}
 							}
-							Bukkit.broadcastMessage(lockdown + yellow + "The prison is now under lockdown, you will not be able to leave this area!");
+							plugin.getServer().broadcastMessage(lockdown + yellow + "The prison is now under lockdown, you will not be able to leave this area!");
 							
 							if (args[1] == null){
 								delay = 5;
@@ -224,18 +228,21 @@ public class LockdownCommandExecutor implements CommandExecutor{
 								sender.sendMessage(lockdown + "You need to choose if you want the delay in seconds or minutes! s or m.");
 								return true;
 							} else if (args[2].equalsIgnoreCase("m")){
-								Bukkit.broadcastMessage(lockdown + ChatColor.GRAY + "Server has been put in lockdown for " + delay + " minute(s).");
+								plugin.getServer().broadcastMessage(lockdown + ChatColor.GRAY + "Server has been put in lockdown for " + delay + " minute(s).");
 
-								ldtask = true;
+								ldt.ldtask = true;
 								@SuppressWarnings("unused")
 								BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 1200);
 								return true;
 							} else if (args[2].equalsIgnoreCase("s")){
-								Bukkit.broadcastMessage(lockdown + ChatColor.GRAY + "Server has been put in lockdown for " + delay + " second(s).");
+								plugin.getServer().broadcastMessage(lockdown + ChatColor.GRAY + "Server has been put in lockdown for " + delay + " second(s).");
+								
+								
 								
 								ldtask = true;
 								@SuppressWarnings("unused")
 								BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 20);
+								//ldt.ldtask = false;
 								return true;
 							}
 						}
@@ -245,15 +252,37 @@ public class LockdownCommandExecutor implements CommandExecutor{
 						return true;
 						}
 					}
-				 } else
+				} else 
+				/**
+				 * Turn the lockdown automatic 
+				 */
+				if(args[0].equalsIgnoreCase("auto")){
+					if (args[1].equalsIgnoreCase("off")){
+						//BukkitTask autoTask = new LockdownScheduler(plugin).runTaskTimer(plugin, 0L, 20L);
+						plugin.getConfig().set("Lockdown.Auto delay.On", false);
+						plugin.saveConfig();
+						
+						sender.sendMessage("Canceled!");
+						return true;
+					}
+					int autoDelay = Integer.parseInt(args[1]);  
+					
+					plugin.getConfig().set("Lockdown.Auto delay.Timer", autoDelay);
+					plugin.getConfig().set("Lockdown.Auto delay.On", true);
+					plugin.saveConfig();
+					
+					@SuppressWarnings("unused")
+					BukkitTask autoTask = new LockdownScheduler(plugin).runTaskTimer(plugin, 0L, 20L);
+					return true;
+				} else
 				/**
 				 * Turns off lockdown
 				 */
 				if(args[0].equalsIgnoreCase("off")){
 					if(sender.hasPermission("lockdown.execute")){
 						if(args.length == 1){
-							if (ldtask == true){
-								ldtask = false;
+							if (ldt.ldtask == true){
+								ldt.ldtask = false;
 								for (Player players : Bukkit.getServer().getOnlinePlayers()){
 									players.sendMessage(lockdown + "Lockdown has been canceled by " + red + sender.getName());
 									return true;

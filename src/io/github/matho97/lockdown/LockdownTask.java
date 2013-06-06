@@ -11,14 +11,17 @@ public class LockdownTask extends BukkitRunnable {
  
     private final JavaPlugin plugin;
 	public String lockdown = ChatColor.RED + "[" + ChatColor.GOLD + "LockDown" + ChatColor.RED + "] " + ChatColor.WHITE;
-	//private LockdownCommandExecutor ldce;
+	private LockdownCommandExecutor ldce;
+	
+	public boolean ldtask;
  
     public LockdownTask(JavaPlugin plugin) {
         this.plugin = plugin;
     }
  
     public void run() {
-    	//if (ldce.ldtask == true){ fix this!
+    	ldtask = true;
+    	if (ldtask == true){
 	    	Double px = plugin.getConfig().getDouble("Lockdown.Location 2.X");
 	    	Double py = plugin.getConfig().getDouble("Lockdown.Location 2.Y");
 	    	Double pz = plugin.getConfig().getDouble("Lockdown.Location 2.Z");
@@ -42,13 +45,15 @@ public class LockdownTask extends BukkitRunnable {
 			for(Player players : Bukkit.getOnlinePlayers()){
 				Location teleportloc = new Location(players.getWorld(), px, py, pz, yaw, pitch);
 				
-				if((players.hasPermission("lockdown.immune"))){
+				if(!(players.hasPermission("lockdown.immune"))){
 					players.setBedSpawnLocation(new Location(players.getWorld(), spawnX, spawnY, spawnZ), true);
 					players.teleport(teleportloc);
 				}
 			}
 	        plugin.getServer().broadcastMessage(lockdown + ChatColor.GREEN + "The prison lockdown is now over!");
-    	//}
+	        //ldce.ldtask = false;
+    	} if (ldce.ldtask == false){
+    		plugin.getServer().broadcastMessage(lockdown + ChatColor.GREEN + "Canceled!");
+    	}
     }
- 
 }

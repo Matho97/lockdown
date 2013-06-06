@@ -23,6 +23,8 @@ public class Lockdown extends JavaPlugin{
 		getConfig().addDefault(location2, "");
 		getConfig().addDefault(spawn1, "");
 		getConfig().addDefault(spawn2, "");
+		getConfig().addDefault("Lockdown.Auto delay", "");
+		getConfig().addDefault("Lockdown.Auto delay.On", true);
 	    getConfig().options().copyDefaults(true); // NOTE: You do not have to use "plugin." if the class extends the java plugin
 	    //Save the config whenever you manipulate it
 	    saveConfig();
