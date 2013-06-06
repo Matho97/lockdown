@@ -69,9 +69,10 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					sender.sendMessage("/lockdown" + yellow + " - Shows this help page.");
 					sender.sendMessage("/lockdown set <1|2>" + yellow + " - Sets the 2 warp points, 1 is the prison, 2 is when it's over.");
 					sender.sendMessage("/lockdown reload" + yellow + " - Reloads the configuration files.");
-					sender.sendMessage("/lockdown on <amount of time> <s|m>" + yellow + " - Sets the prison into lockdown mode, s = seconds, m = minutes");
+					sender.sendMessage("/lockdown on <amount of time> <s|m>" + yellow + " - Sets the prison into lockdown mode, s = seconds, m = minutes.");
 					sender.sendMessage("/lockdown off" + yellow + " - Cancels the lockdown.");
-					sender.sendMessage("/lockdown info" + yellow + " - Outputs the version number");
+					sender.sendMessage("/lockdown auto <time|off>" + yellow + " - Enables and disabled automatick lockdown.");
+					sender.sendMessage("/lockdown info" + yellow + " - Outputs the version number.");
 					//sender.sendMessage("");
 					/*if(player.getInventory().contains(new ItemStack(Material.STICK))){
 						sender.sendMessage(darkred + "hello");
@@ -216,7 +217,8 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							Double py = plugin.getConfig().getDouble(plugin.location2 + ".Y");
 							Double pz = plugin.getConfig().getDouble(plugin.location2 + ".Z");
 							
-							if(sx == null||sy == null||sz == null ||px == null||py == null||pz == null){
+							if(sx == 0.0||sy == 0.0||sz == 0.0 ||px == 0.0||py == 0.0||pz == 0.0){
+								sender.sendMessage(red + "--------------------- " + yellow + lockdown + red + "---------------------");
 								sender.sendMessage(lockdown + "You have not set all of the teleportation points!");
 								sender.sendMessage(lockdown + "Do /lockdown set 1 and /lockdown set 2, to set the 2 teleportation points.");
 								sender.sendMessage(lockdown + "===== Also, Remember: =====");
@@ -277,32 +279,59 @@ public class LockdownCommandExecutor implements CommandExecutor{
 				 * Turn the lockdown automatic 
 				 */
 				if(args[0].equalsIgnoreCase("auto")){
-					if (args[1].equalsIgnoreCase("off")){
-						//BukkitTask autoTask = new LockdownScheduler(plugin).runTaskTimer(plugin, 0L, 20L);
-						/*int d = 0;
-						
-						for(int i = 0; i < 10; i++){
-							d++;
-							sender.sendMessage(Integer.toString(d));
-						}
-						int left = 10 - d;
-						sender.sendMessage(Integer.toString(left));*/
-						
-						plugin.getConfig().set("Lockdown.Auto delay.On", false);
-						plugin.saveConfig();
-						
-						sender.sendMessage("Canceled!");
+					if (args.length == 1){
+						sender.sendMessage(notenough);
+						sender.sendMessage("Usage: /lockdown auto <time|off>");
+						return true;
+					} else if (args.length >= 3){
+						sender.sendMessage(toomany);
+						sender.sendMessage("Usage: /lockdown auto <time|off>");
 						return true;
 					}
-					int autoDelay = Integer.parseInt(args[1]);  
-					
-					plugin.getConfig().set("Lockdown.Auto delay.Timer", autoDelay);
-					plugin.getConfig().set("Lockdown.Auto delay.On", true);
-					plugin.saveConfig();
-					
-					@SuppressWarnings("unused")
-					BukkitTask autoTask = new LockdownScheduler(plugin).runTaskTimer(plugin, 0L, 20L);
-					return true;
+						Double sx = plugin.getConfig().getDouble(plugin.location1 + ".X");
+					    Double sy = plugin.getConfig().getDouble(plugin.location1 + ".Y");
+					    Double sz = plugin.getConfig().getDouble(plugin.location1 + ".Z");
+						
+						Double px = plugin.getConfig().getDouble(plugin.location2 + ".X");
+						Double py = plugin.getConfig().getDouble(plugin.location2 + ".Y");
+						Double pz = plugin.getConfig().getDouble(plugin.location2 + ".Z");
+						if (args[1].equalsIgnoreCase("off")){
+							//BukkitTask autoTask = new LockdownScheduler(plugin).runTaskTimer(plugin, 0L, 20L);
+							/*int d = 0;
+							
+							for(int i = 0; i < 10; i++){
+								d++;
+								sender.sendMessage(Integer.toString(d));
+							}
+							int left = 10 - d;
+							sender.sendMessage(Integer.toString(left));*/
+							
+							plugin.getConfig().set("Lockdown.Auto delay.On", false);
+							plugin.saveConfig();
+							
+							sender.sendMessage("Canceled!");
+							return true;
+						}
+						
+						if(sx == 0.0||sy == 0.0||sz == 0.0 ||px == 0.0||py == null||pz == 0.0){
+							sender.sendMessage(red + "--------------------- " + yellow + lockdown + red + "---------------------");
+							sender.sendMessage(lockdown + "You have not set all of the teleportation points!");
+							sender.sendMessage(lockdown + "Do /lockdown set 1 and /lockdown set 2, to set the 2 teleportation points.");
+							sender.sendMessage(lockdown + "===== Also, Remember: =====");
+							sender.sendMessage(lockdown + "Point 1 is where users tp to during lockdown!");
+							sender.sendMessage(lockdown + "Point 2 is where users tp to " + red + "AFTER " + white +  "lockdown!");
+							return true;
+						} else {
+							int autoDelay = Integer.parseInt(args[1]);
+							
+							plugin.getConfig().set("Lockdown.Auto delay.Timer", autoDelay);
+							plugin.getConfig().set("Lockdown.Auto delay.On", true);
+							plugin.saveConfig();
+							
+							@SuppressWarnings("unused")
+							BukkitTask autoTask = new LockdownScheduler(plugin).runTaskTimer(plugin, 0L, 20L);
+							return true;
+						}
 				} else
 				/**
 				 * Turns off lockdown

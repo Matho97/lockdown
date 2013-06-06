@@ -112,8 +112,8 @@ public class LockdownScheduler extends BukkitRunnable {
 	    count++;
 	    		 
     	} else {
-    		plugin.getServer().broadcastMessage("Not on!");
-    		this.cancel();
+    		//plugin.getServer().broadcastMessage("Not on!");
+    		//this.cancel();
     	}
    	}
 }

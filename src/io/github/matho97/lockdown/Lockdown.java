@@ -12,7 +12,7 @@ public class Lockdown extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		loadConfiguration();
-		getLogger().info("Lockdown has been enabled");
+		//getLogger().info("Lockdown has been enabled");
 		getCommand("lockdown").setExecutor(new LockdownCommandExecutor(this));
 		//new PluginListener(this);
 	}
