@@ -1,5 +1,6 @@
 package io.github.matho97.lockdown;
 
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,22 +15,38 @@ import org.bukkit.scheduler.BukkitTask;
 public class LockdownCommandExecutor implements CommandExecutor{
 
 	private Lockdown plugin;
-	public String lockdown = ChatColor.RED + "[" + ChatColor.GOLD + "LockDown" + ChatColor.RED + "] " + ChatColor.WHITE;
-	public String notenough = lockdown + ChatColor.YELLOW + "Not enough arguments!";
-	public String toomany = lockdown + ChatColor.YELLOW + "Too many arguments!";
-	// Easier chat coloring during string broadcasts and such. Seeing as we do it so much in here ;)
-	public ChatColor red = ChatColor.RED;
-	public ChatColor yellow = ChatColor.YELLOW;
-	public ChatColor green = ChatColor.GREEN;
-	public ChatColor white = ChatColor.WHITE;
-	public ChatColor purple = ChatColor.LIGHT_PURPLE;
-	public ChatColor darkpurple = ChatColor.DARK_PURPLE;
-	public ChatColor gold = ChatColor.GOLD;
-
 	private LockdownTask ldt;
-	@SuppressWarnings("unused")
-	private LockdownScheduler lds;
 	
+	// Easier chat coloring during string broadcasts and such. Seeing as we do it so much in here ;)
+	public ChatColor
+	aqua = ChatColor.AQUA,
+	black = ChatColor.BLACK,
+	blue = ChatColor.BLUE,
+	bold = ChatColor.BOLD,
+	darkaqua = ChatColor.DARK_AQUA,
+	darkblue = ChatColor.DARK_BLUE,
+	darkgray = ChatColor.DARK_GRAY,
+	darkgreen = ChatColor.DARK_GREEN,
+	darkpurple = ChatColor.DARK_PURPLE,
+	darkred = ChatColor.DARK_RED,
+	gold = ChatColor.GOLD,
+	gray = ChatColor.GRAY,
+	green = ChatColor.GREEN,
+	italic = ChatColor.ITALIC,
+	magic = ChatColor.MAGIC,
+	purple = ChatColor.LIGHT_PURPLE,
+	red = ChatColor.RED,
+	reset = ChatColor.RESET,
+	strike = ChatColor.STRIKETHROUGH,
+	underline = ChatColor.UNDERLINE,
+	white = ChatColor.WHITE,
+	yellow = ChatColor.YELLOW
+	;
+	
+	public String lockdown = red + "[" + gold + "LockDown" + red + "] " + white;
+	public String notenough = lockdown + yellow + "Not enough arguments!";
+	public String toomany = lockdown + yellow + "Too many arguments!";
+
 	public boolean ldtask = false;
 	public boolean ldtimer = false;
 	public boolean ldscheduler = false;
@@ -48,7 +65,8 @@ public class LockdownCommandExecutor implements CommandExecutor{
 		 */
 		if (cmd.getName().equalsIgnoreCase("lockdown")){
 				if (args.length == 0){
-					sender.sendMessage(gold + "----------------- " + lockdown + ChatColor.WHITE + " Help Page " + gold + "----------------");
+					//Player player = (Player) sender;
+					sender.sendMessage(gold + "----------------- " + lockdown + white + " Help Page " + gold + "----------------");
 					sender.sendMessage("/lockdown" + yellow + " - Shows this help page.");
 					sender.sendMessage("/lockdown set <1|2>" + yellow + " - Sets the 2 warp points, 1 is the prison, 2 is when it's over.");
 					sender.sendMessage("/lockdown reload" + yellow + " - Reloads the configuration files.");
@@ -56,6 +74,9 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					sender.sendMessage("/lockdown off" + yellow + " - Cancels the lockdown.");
 					sender.sendMessage("/lockdown version" + yellow + " - Outputs the version number");
 					//sender.sendMessage("");
+					/*if(player.getInventory().contains(new ItemStack(Material.STICK))){
+						sender.sendMessage(darkred + "hello");
+					}*/
 					return true;
 				}
 				/**
@@ -101,7 +122,6 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							
 							plugin.saveConfig();
 
-	
 							String posX = x.toString();
 							String posY = y.toString();
 							String posZ = z.toString();
@@ -260,10 +280,19 @@ public class LockdownCommandExecutor implements CommandExecutor{
 				if(args[0].equalsIgnoreCase("auto")){
 					if (args[1].equalsIgnoreCase("off")){
 						//BukkitTask autoTask = new LockdownScheduler(plugin).runTaskTimer(plugin, 0L, 20L);
-						plugin.getConfig().set("Lockdown.Auto delay.On", false);
+						int d = 0;
+						
+						for(int i = 0; i < 10; i++){
+							d++;
+							sender.sendMessage(Integer.toString(d));
+						}
+						int left = 10 - d;
+						sender.sendMessage(Integer.toString(left));
+						
+						/*plugin.getConfig().set("Lockdown.Auto delay.On", false);
 						plugin.saveConfig();
 						
-						sender.sendMessage("Canceled!");
+						sender.sendMessage("Canceled!");*/
 						return true;
 					}
 					int autoDelay = Integer.parseInt(args[1]);  
@@ -301,12 +330,20 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					
 					return true;
 				}
-				if(args[0].equalsIgnoreCase("version")){
-					if(args.length == 0){
-						sender.sendMessage(plugin.version);
+				if(args[0].equalsIgnoreCase("info")){
+					if(args.length == 1){
+						String version = plugin.getDescription().getVersion();
+						List<String> authors = plugin.getDescription().getAuthors();
+						String site = plugin.getDescription().getWebsite();
+						
+						sender.sendMessage(red + "----------- " + yellow + lockdown + red + "-----------");
+						sender.sendMessage(lockdown + yellow + "Version: " + red + version);
+						sender.sendMessage(lockdown + yellow + "Authors: " + red + authors.toString().replace("[", "").replace("]", ""));
+						sender.sendMessage(lockdown + yellow + "Website: " + red + site);
+					} else {
+						sender.sendMessage(toomany);
+						sender.sendMessage("Usage: /lockdown version");
 					}
-					sender.sendMessage(toomany);
-					sender.sendMessage("Usage: /lockdown version");
 					return true;
 				}
 			return false;

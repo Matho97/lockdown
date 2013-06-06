@@ -1,7 +1,9 @@
 name: Lockdown
+prefix: LD
 main: io.github.matho97.lockdown.Lockdown
 author: Matho97 and Never2nv
-version: 1.1.1
+version: 1.1.2
+website: www.fngnation.net
 commands:
   lockdown:
     description: Commands for lockdown.

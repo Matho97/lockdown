@@ -10,8 +10,35 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class LockdownTask extends BukkitRunnable {
  
     private final JavaPlugin plugin;
-	public String lockdown = ChatColor.RED + "[" + ChatColor.GOLD + "LockDown" + ChatColor.RED + "] " + ChatColor.WHITE;
 	private LockdownCommandExecutor ldce;
+	
+	// Easier chat coloring during string broadcasts and such. Seeing as we do it so much in here ;)
+	public ChatColor
+	aqua = ChatColor.AQUA,
+	black = ChatColor.BLACK,
+	blue = ChatColor.BLUE,
+	bold = ChatColor.BOLD,
+	darkaqua = ChatColor.DARK_AQUA,
+	darkblue = ChatColor.DARK_BLUE,
+	darkgray = ChatColor.DARK_GRAY,
+	darkgreen = ChatColor.DARK_GREEN,
+	darkpurple = ChatColor.DARK_PURPLE,
+	darkred = ChatColor.DARK_RED,
+	gold = ChatColor.GOLD,
+	gray = ChatColor.GRAY,
+	green = ChatColor.GREEN,
+	italic = ChatColor.ITALIC,
+	magic = ChatColor.MAGIC,
+	purple = ChatColor.LIGHT_PURPLE,
+	red = ChatColor.RED,
+	reset = ChatColor.RESET,
+	strike = ChatColor.STRIKETHROUGH,
+	underline = ChatColor.UNDERLINE,
+	white = ChatColor.WHITE,
+	yellow = ChatColor.YELLOW
+	;
+    
+    public String lockdown = red + "[" + gold + "LockDown" + red + "] " + white;
 	
 	public boolean ldtask;
  
@@ -36,12 +63,6 @@ public class LockdownTask extends BukkitRunnable {
 			Float pitch = ppitch.floatValue();
 			Float yaw = pyaw.floatValue();
 			
-			/*double x = Double.parseDouble(sx);
-			double y = Double.parseDouble(sy);
-			double z = Double.parseDouble(sz);
-			float pitch = Float.parseFloat(spitch);
-			float yaw = Float.parseFloat(syaw);*/
-			
 			for(Player players : Bukkit.getOnlinePlayers()){
 				Location teleportloc = new Location(players.getWorld(), px, py, pz, yaw, pitch);
 				
@@ -50,10 +71,10 @@ public class LockdownTask extends BukkitRunnable {
 					players.teleport(teleportloc);
 				}
 			}
-	        plugin.getServer().broadcastMessage(lockdown + ChatColor.GREEN + "The prison lockdown is now over!");
+	        plugin.getServer().broadcastMessage(lockdown + green + "The prison lockdown is now over!");
 	        //ldce.ldtask = false;
     	} if (ldce.ldtask == false){
-    		plugin.getServer().broadcastMessage(lockdown + ChatColor.GREEN + "Canceled!");
+    		plugin.getServer().broadcastMessage(lockdown + green + "Canceled!");
     	}
     }
 }

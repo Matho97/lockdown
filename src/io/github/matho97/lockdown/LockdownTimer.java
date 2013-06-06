@@ -9,7 +9,9 @@ public class LockdownTimer extends BukkitRunnable {
  
     @SuppressWarnings("unused")
 	private final JavaPlugin plugin;
-	public String lockdown = ChatColor.RED + "[" + ChatColor.GOLD + "LockDown" + ChatColor.RED + "] " + ChatColor.WHITE;
+	private Colors c;
+	
+	public String lockdown = c.red + "[" + c.gold + "LockDown" + c.red + "] " + ChatColor.WHITE;
 	private LockdownCommandExecutor ldce;
  
     public LockdownTimer(JavaPlugin plugin) {

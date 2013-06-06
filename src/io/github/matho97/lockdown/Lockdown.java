@@ -1,6 +1,5 @@
 package io.github.matho97.lockdown;
 
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Lockdown extends JavaPlugin{
@@ -10,11 +9,10 @@ public class Lockdown extends JavaPlugin{
 	public String spawn1 = "Lockdown.Spawn 1";
 	public String spawn2 = "Lockdown.Spawn 2";
 	
-	public String version = "1.1.1";
 	@Override
 	public void onEnable(){
 		loadConfiguration();
-		getLogger().info(ChatColor.DARK_RED + "Lockdown has been enabled");
+		getLogger().info("Lockdown has been enabled");
 		getCommand("lockdown").setExecutor(new LockdownCommandExecutor(this));
 		//new PluginListener(this);
 	}

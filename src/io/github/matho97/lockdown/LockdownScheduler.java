@@ -10,7 +10,35 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class LockdownScheduler extends BukkitRunnable {
  
 	private final JavaPlugin plugin;
-	public String lockdown = ChatColor.RED + "[" + ChatColor.GOLD + "LockDown" + ChatColor.RED + "] " + ChatColor.WHITE;
+	
+	// Easier chat coloring during string broadcasts and such. Seeing as we do it so much in here ;)
+	public ChatColor
+	aqua = ChatColor.AQUA,
+	black = ChatColor.BLACK,
+	blue = ChatColor.BLUE,
+	bold = ChatColor.BOLD,
+	darkaqua = ChatColor.DARK_AQUA,
+	darkblue = ChatColor.DARK_BLUE,
+	darkgray = ChatColor.DARK_GRAY,
+	darkgreen = ChatColor.DARK_GREEN,
+	darkpurple = ChatColor.DARK_PURPLE,
+	darkred = ChatColor.DARK_RED,
+	gold = ChatColor.GOLD,
+	gray = ChatColor.GRAY,
+	green = ChatColor.GREEN,
+	italic = ChatColor.ITALIC,
+	magic = ChatColor.MAGIC,
+	purple = ChatColor.LIGHT_PURPLE,
+	red = ChatColor.RED,
+	reset = ChatColor.RESET,
+	strike = ChatColor.STRIKETHROUGH,
+	underline = ChatColor.UNDERLINE,
+	white = ChatColor.WHITE,
+	yellow = ChatColor.YELLOW
+	;
+    
+    public String lockdown = red + "[" + gold + "LockDown" + red + "] " + white;
+	
 	@SuppressWarnings("unused")
 	private LockdownCommandExecutor ldst;
  
@@ -42,12 +70,6 @@ public class LockdownScheduler extends BukkitRunnable {
 				Float pitch = spitch.floatValue();
 				Float yaw = syaw.floatValue();
 				
-				/*double x = Double.parseDouble(sx);
-				double y = Double.parseDouble(sy);
-				double z = Double.parseDouble(sz);
-				float pitch = Float.parseFloat(spitch);
-				float yaw = Float.parseFloat(syaw);*/
-				
 				for(Player players : Bukkit.getOnlinePlayers()){
 					Location teleportloc = new Location(players.getWorld(), sx, sy, sz, yaw, pitch);
 					
@@ -56,7 +78,7 @@ public class LockdownScheduler extends BukkitRunnable {
 						players.teleport(teleportloc);
 					}
 				}
-				plugin.getServer().broadcastMessage(lockdown + ChatColor.YELLOW + "The prison is now under lockdown, you will not be able to leave this area!");
+				plugin.getServer().broadcastMessage(lockdown + yellow + "The prison is now under lockdown, you will not be able to leave this area!");
 	    	} else if (count == delay) {
 	    		Double px = plugin.getConfig().getDouble("Lockdown.Location 2.X");
 	    	   	Double py = plugin.getConfig().getDouble("Lockdown.Location 2.Y");
@@ -72,12 +94,6 @@ public class LockdownScheduler extends BukkitRunnable {
 	   			Float pitch2 = ppitch.floatValue();
 	   			Float yaw2 = pyaw.floatValue();
 	    			
-	    		/*double x = Double.parseDouble(sx);
-	    		double y = Double.parseDouble(sy);
-	    		double z = Double.parseDouble(sz);
-	    		float pitch = Float.parseFloat(spitch);
-	    		float yaw = Float.parseFloat(syaw);*/
-	    			
 	    		for(Player players : Bukkit.getOnlinePlayers()){
 	    			Location teleportloc = new Location(players.getWorld(), px, py, pz, yaw2, pitch2);
 	    			
@@ -86,7 +102,7 @@ public class LockdownScheduler extends BukkitRunnable {
 	    				players.teleport(teleportloc);
 	    			}
 	    		}
-	    		plugin.getServer().broadcastMessage(lockdown + ChatColor.GREEN + "The prison lockdown is now over!");
+	    		plugin.getServer().broadcastMessage(lockdown + green + "The prison lockdown is now over!");
 	    		plugin.getServer().broadcast(lockdown, lockdown);
 	    			
 			    //this.cancel();
