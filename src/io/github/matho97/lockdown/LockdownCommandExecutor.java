@@ -72,7 +72,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					sender.sendMessage("/lockdown reload" + yellow + " - Reloads the configuration files.");
 					sender.sendMessage("/lockdown on <amount of time> <s|m>" + yellow + " - Sets the prison into lockdown mode, s = seconds, m = minutes");
 					sender.sendMessage("/lockdown off" + yellow + " - Cancels the lockdown.");
-					sender.sendMessage("/lockdown version" + yellow + " - Outputs the version number");
+					sender.sendMessage("/lockdown info" + yellow + " - Outputs the version number");
 					//sender.sendMessage("");
 					/*if(player.getInventory().contains(new ItemStack(Material.STICK))){
 						sender.sendMessage(darkred + "hello");
