@@ -1,6 +1,7 @@
 name: Prison Lockdown
 main: io.github.matho97.lockdown.Lockdown
-version: 1.0.1
+author: matho97 and never2nv
+version: 1.1.1
 commands:
   lockdown:
     description: Commands for lockdown.
