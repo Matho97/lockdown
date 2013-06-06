@@ -254,6 +254,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 									players.sendMessage(lockdown + gray + "Server has been put in lockdown for " + delay + " minute(s).");
 								}
 								plugin.getConfig().set("Lockdown.On", true);
+								plugin.saveConfig();
 								@SuppressWarnings("unused")
 								BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 1200);
 								return true;
@@ -262,6 +263,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 									players.sendMessage(lockdown + gray + "Server has been put in lockdown for " + delay + " second(s).");
 								}
 								plugin.getConfig().set("Lockdown.On", true);
+								plugin.saveConfig();
 								@SuppressWarnings("unused")
 								BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 20);
 								//ldt.ldtask = false;
@@ -343,7 +345,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					    	
 							if (ldtask == true){
 								plugin.getConfig().set("Lockdown.On", false);
-								
+								plugin.saveConfig();
 								
 								for (Player players : Bukkit.getServer().getOnlinePlayers()){
 									players.sendMessage(lockdown + "Lockdown has been canceled by " + red + sender.getName());

@@ -75,6 +75,7 @@ public class LockdownTask extends BukkitRunnable {
 			}
 
 			plugin.getConfig().set("Lockdown.On", false);
+			plugin.saveConfig();
     	}
     }
 }
