@@ -9,6 +9,8 @@ public class Lockdown extends JavaPlugin{
 	public String location2 = "Lockdown.Location 2";
 	public String spawn1 = "Lockdown.Spawn 1";
 	public String spawn2 = "Lockdown.Spawn 2";
+	
+	public String version = "1.1.1";
 	@Override
 	public void onEnable(){
 		loadConfiguration();
