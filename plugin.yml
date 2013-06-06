@@ -1,6 +1,6 @@
 name: Prison Lockdown
 main: io.github.matho97.lockdown.Lockdown
-author: matho97 and never2nv
+author: Matho97 and Never2nv
 version: 1.1.1
 commands:
   lockdown:
@@ -8,7 +8,7 @@ commands:
     usage: Usage /lockdown
     permission: lockdown
     permission-message: You don't have access to 'Lockdown'
-    aliases: [ld, lockd, ldown]
+    aliases: [ld]
 permissions:
   lockdown.execute:
    default: op
