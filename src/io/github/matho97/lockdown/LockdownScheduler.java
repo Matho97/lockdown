@@ -4,10 +4,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
  
-public class LockdownScheduler extends BukkitRunnable {
+public class LockdownScheduler extends BukkitRunnable implements BukkitTask {
  
 	private final JavaPlugin plugin;
 	
@@ -45,15 +47,16 @@ public class LockdownScheduler extends BukkitRunnable {
     public LockdownScheduler(JavaPlugin plugin) {
         this.plugin = plugin;
     }
-	private int count = 0;
-	private int delay = 0;
-	private boolean auto = true;
+	public int count = 0;
+	public int delay = 0;
+	public boolean auto = true;
  
     public void run() {
-    	delay = plugin.getConfig().getInt("Lockdown.Auto delay.Timer");
-    	auto = plugin.getConfig().getBoolean("Lockdown.Auto delay.On");
+    	delay = plugin.getConfig().getInt("Lockdown.Auto.Delay");
+    	auto = plugin.getConfig().getBoolean("Lockdown.Auto.On");
 
     	if (auto == true){
+    		
         	//Bukkit.broadcastMessage(Integer.toString(count));
 	    	if(count == 0){
 				Double sx = plugin.getConfig().getDouble("Lockdown.Location 1.X");
@@ -63,9 +66,9 @@ public class LockdownScheduler extends BukkitRunnable {
 		    	Double spitch = plugin.getConfig().getDouble("Lockdown.Location 1.Pitch");
 		    	Double syaw = plugin.getConfig().getDouble("Lockdown.Location 1.Yaw");
 		
-			    Double spawnX = plugin.getConfig().getDouble("Lockdown.Spawn 1.X");
+			    /*Double spawnX = plugin.getConfig().getDouble("Lockdown.Spawn 1.X");
 			    Double spawnY = plugin.getConfig().getDouble("Lockdown.Spawn 1.Y");
-			    Double spawnZ = plugin.getConfig().getDouble("Lockdown.Spawn 1.Z");
+			    Double spawnZ = plugin.getConfig().getDouble("Lockdown.Spawn 1.Z");*/
 		
 				Float pitch = spitch.floatValue();
 				Float yaw = syaw.floatValue();
@@ -74,10 +77,15 @@ public class LockdownScheduler extends BukkitRunnable {
 					Location teleportloc = new Location(players.getWorld(), sx, sy, sz, yaw, pitch);
 					
 					if((players.hasPermission("lockdown.immune"))){
-						players.setBedSpawnLocation(new Location(players.getWorld(), spawnX, spawnY, spawnZ), true);
+						//players.setBedSpawnLocation(new Location(players.getWorld(), spawnX, spawnY, spawnZ), true);
 						players.teleport(teleportloc);
 					}
 					players.sendMessage(lockdown + yellow + "The prison is now under lockdown, you will not be able to leave this area!");
+					if(delay < 60){
+						players.sendMessage(lockdown + gray + "Server has been put in lockdown for " + delay + " second(s).");
+					} else if (delay >= 60){
+						players.sendMessage(lockdown + gray + "Server has been put in lockdown for " + delay / 60 + " minute(s).");
+					}
 				}
 				
 	    	} else if (count == delay) {
@@ -88,9 +96,9 @@ public class LockdownScheduler extends BukkitRunnable {
 	    	   	Double ppitch = plugin.getConfig().getDouble("Lockdown.Location 2.Pitch");
 	    	   	Double pyaw = plugin.getConfig().getDouble("Lockdown.Location 2.Yaw");
 	
-	    	   	Double spawnX2 = plugin.getConfig().getDouble("Lockdown.Spawn 2.X");
+	    	   	/*Double spawnX2 = plugin.getConfig().getDouble("Lockdown.Spawn 2.X");
 	   		    Double spawnY2 = plugin.getConfig().getDouble("Lockdown.Spawn 2.Y");
-	   		    Double spawnZ2 = plugin.getConfig().getDouble("Lockdown.Spawn 2.Z");
+	   		    Double spawnZ2 = plugin.getConfig().getDouble("Lockdown.Spawn 2.Z");*/
 	   	
 	   			Float pitch2 = ppitch.floatValue();
 	   			Float yaw2 = pyaw.floatValue();
@@ -99,7 +107,7 @@ public class LockdownScheduler extends BukkitRunnable {
 	    			Location teleportloc = new Location(players.getWorld(), px, py, pz, yaw2, pitch2);
 	    			
 	    			if((players.hasPermission("lockdown.immune"))){
-	    				players.setBedSpawnLocation(new Location(players.getWorld(), spawnX2, spawnY2, spawnZ2), true);
+	    				//players.setBedSpawnLocation(new Location(players.getWorld(), spawnX2, spawnY2, spawnZ2), true);
 	    				players.teleport(teleportloc);
 	    			}
 		    		players.sendMessage(lockdown + green + "The prison lockdown is now over!");
@@ -112,8 +120,22 @@ public class LockdownScheduler extends BukkitRunnable {
 	    count++;
 	    		 
     	} else {
+    		count = 0;
+			this.cancel();
     		//plugin.getServer().broadcastMessage("Not on!");
     		//this.cancel();
     	}
    	}
+
+	@Override
+	public Plugin getOwner() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isSync() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

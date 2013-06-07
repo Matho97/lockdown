@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Lockdown extends JavaPlugin implements Listener{
@@ -57,11 +58,11 @@ public class Lockdown extends JavaPlugin implements Listener{
 	     //See "Creating you're defaults"
 		getConfig().addDefault(location1, "");
 		getConfig().addDefault(location2, "");
-		getConfig().addDefault(spawn1, "");
-		getConfig().addDefault(spawn2, "");
+		//getConfig().addDefault(spawn1, "");
+		//getConfig().addDefault(spawn2, "");
 		getConfig().addDefault("Lockdown.On", "");
-		getConfig().addDefault("Lockdown.Auto delay", "");
-		getConfig().addDefault("Lockdown.Auto delay.On", true);
+		getConfig().addDefault("Lockdown.Auto.On", "");
+		getConfig().addDefault("Lockdown.Auto.Count", 0);
 	    getConfig().options().copyDefaults(true); // NOTE: You do not have to use "plugin." if the class extends the java plugin
 	    //Save the config whenever you manipulate it
 	    saveConfig();
@@ -79,9 +80,9 @@ public class Lockdown extends JavaPlugin implements Listener{
 		    Double spitch = getConfig().getDouble(location1 + ".Pitch");
 		    Double syaw = getConfig().getDouble(location1 + ".Yaw");
 		    
-		    Double spawnX = getConfig().getDouble(spawn1 + ".X");
+		    /*Double spawnX = getConfig().getDouble(spawn1 + ".X");
 		    Double spawnY = getConfig().getDouble(spawn1 + ".Y");
-		    Double spawnZ = getConfig().getDouble(spawn1 + ".Z");
+		    Double spawnZ = getConfig().getDouble(spawn1 + ".Z");*/
 		    
 		    Float pitch = spitch.floatValue();
 			Float yaw = syaw.floatValue();
@@ -89,10 +90,33 @@ public class Lockdown extends JavaPlugin implements Listener{
 			Location teleportloc = new Location(player.getWorld(), sx, sy, sz, yaw, pitch);
 			
 			if((player.hasPermission("lockdown.immune"))){
-				player.setBedSpawnLocation(new Location(player.getWorld(), spawnX, spawnY, spawnZ), true);
+				//player.setBedSpawnLocation(new Location(player.getWorld(), spawnX, spawnY, spawnZ), true);
 				player.teleport(teleportloc);
 			}
 			player.sendMessage(lockdown + yellow + "The prison is now under lockdown, you will not be able to leave this area!");
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onPlayerRespawn(PlayerRespawnEvent event){
+		Player player = event.getPlayer();
+    	boolean on = getConfig().getBoolean("Lockdown.On");
+    	
+		if(on == true){
+		    Double sx = getConfig().getDouble(location1 + ".X");
+		    Double sy = getConfig().getDouble(location1 + ".Y");
+		    Double sz = getConfig().getDouble(location1 + ".Z");
+		    
+		    Double spitch = getConfig().getDouble(location1 + ".Pitch");
+		    Double syaw = getConfig().getDouble(location1 + ".Yaw");
+		    
+		    Float pitch = spitch.floatValue();
+		    Float yaw = syaw.floatValue();
+			
+		    Location teleportloc = new Location(player.getWorld(), sx, sy, sz, yaw, pitch);
+			if((player.hasPermission("lockdown.immune"))){
+				event.setRespawnLocation(teleportloc);
+			}
 		}
 	}
 	

@@ -56,9 +56,9 @@ public class LockdownTask extends BukkitRunnable {
 	    	Double ppitch = plugin.getConfig().getDouble("Lockdown.Location 2.Pitch");
 	    	Double pyaw = plugin.getConfig().getDouble("Lockdown.Location 2.Yaw");
 
-		    Double spawnX = plugin.getConfig().getDouble("Lockdown.Spawn 2.X");
+	    	/*Double spawnX = plugin.getConfig().getDouble("Lockdown.Spawn 2.X");
 		    Double spawnY = plugin.getConfig().getDouble("Lockdown.Spawn 2.Y");
-		    Double spawnZ = plugin.getConfig().getDouble("Lockdown.Spawn 2.Z");
+		    Double spawnZ = plugin.getConfig().getDouble("Lockdown.Spawn 2.Z");*/
 	
 			Float pitch = ppitch.floatValue();
 			Float yaw = pyaw.floatValue();
@@ -67,9 +67,8 @@ public class LockdownTask extends BukkitRunnable {
 				Location teleportloc = new Location(players.getWorld(), px, py, pz, yaw, pitch);
 				
 				if(!(players.hasPermission("lockdown.immune"))){
-					players.setBedSpawnLocation(new Location(players.getWorld(), spawnX, spawnY, spawnZ), true);
+					//players.setBedSpawnLocation(new Location(players.getWorld(), spawnX, spawnY, spawnZ), true);
 					players.teleport(teleportloc);
-					players.sendMessage(lockdown + green + "The prison lockdown is now over!");
 				}
 				players.sendMessage(lockdown + green + "The prison lockdown is now over!");
 			}
