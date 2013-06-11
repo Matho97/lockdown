@@ -89,7 +89,7 @@ public class Lockdown extends JavaPlugin implements Listener{
 			
 			Location teleportloc = new Location(player.getWorld(), sx, sy, sz, yaw, pitch);
 			
-			if((player.hasPermission("lockdown.immune"))){
+			if(!(player.hasPermission("lockdown.immune"))){
 				//player.setBedSpawnLocation(new Location(player.getWorld(), spawnX, spawnY, spawnZ), true);
 				player.teleport(teleportloc);
 			}
@@ -114,7 +114,7 @@ public class Lockdown extends JavaPlugin implements Listener{
 		    Float yaw = syaw.floatValue();
 			
 		    Location teleportloc = new Location(player.getWorld(), sx, sy, sz, yaw, pitch);
-			if((player.hasPermission("lockdown.immune"))){
+			if(!(player.hasPermission("lockdown.immune"))){
 				event.setRespawnLocation(teleportloc);
 			}
 		}

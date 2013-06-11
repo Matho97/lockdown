@@ -76,7 +76,7 @@ public class LockdownScheduler extends BukkitRunnable implements BukkitTask {
 				for(Player players : Bukkit.getOnlinePlayers()){
 					Location teleportloc = new Location(players.getWorld(), sx, sy, sz, yaw, pitch);
 					
-					if((players.hasPermission("lockdown.immune"))){
+					if(!(players.hasPermission("lockdown.immune"))){
 						//players.setBedSpawnLocation(new Location(players.getWorld(), spawnX, spawnY, spawnZ), true);
 						players.teleport(teleportloc);
 					}
@@ -106,7 +106,7 @@ public class LockdownScheduler extends BukkitRunnable implements BukkitTask {
 	    		for(Player players : Bukkit.getOnlinePlayers()){
 	    			Location teleportloc = new Location(players.getWorld(), px, py, pz, yaw2, pitch2);
 	    			
-	    			if((players.hasPermission("lockdown.immune"))){
+	    			if(!(players.hasPermission("lockdown.immune"))){
 	    				//players.setBedSpawnLocation(new Location(players.getWorld(), spawnX2, spawnY2, spawnZ2), true);
 	    				players.teleport(teleportloc);
 	    			}
