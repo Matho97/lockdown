@@ -21,4 +21,4 @@ permissions:
   lockdown.timeleft:
    default: op
   lockdown.immune:
-    default: op
+   default: op

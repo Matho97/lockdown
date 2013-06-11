@@ -45,8 +45,9 @@ public class LockdownCommandExecutor implements CommandExecutor{
 	public String notenough = lockdown + yellow + "Not enough arguments!";
 	public String toomany = lockdown + yellow + "Too many arguments!";
 
-	public boolean ldtask = false;
-	public boolean ldtimer = false;
+	public boolean ldTask = false;
+	public boolean ldTimer = false;
+	public boolean ldTimerAuto = false;
 	public boolean ldscheduler = false;
 	
 	public int delay;
@@ -70,8 +71,9 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					sender.sendMessage("/lockdown reload" + yellow + " - Reloads the configuration files.");
 					sender.sendMessage("/lockdown on <amount of time> <s|m>" + yellow + " - Sets the prison into lockdown mode, s = seconds, m = minutes.");
 					sender.sendMessage("/lockdown off" + yellow + " - Cancels the lockdown.");
-					sender.sendMessage("/lockdown auto <time|off>" + yellow + " - Enables and disabled automatick lockdown.");
+					sender.sendMessage("/lockdown auto <time|off> <s|m>" + yellow + " - Enables and disabled automatick lockdown, s = seconds, m = minutes.");
 					sender.sendMessage("/lockdown info" + yellow + " - Outputs the version number.");
+					sender.sendMessage("/lockdown time" + yellow + " - Outputs how much time there is left of a lockdown.");
 					//sender.sendMessage("");
 					/*if(player.getInventory().contains(new ItemStack(Material.STICK))){
 						sender.sendMessage(darkred + "hello");
@@ -192,7 +194,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 							sender.sendMessage(notenough);
 							sender.sendMessage(lockdown + "Usage: /lockdown on <amount of time> <s|m>");
 							return true;
-						} else if (args.length == 4){
+						} else if (args.length >= 4){
 							sender.sendMessage(toomany);
 							sender.sendMessage(lockdown + "Usage: /lockdown on <amount of time> <s|m>");
 							return true;
@@ -245,22 +247,32 @@ public class LockdownCommandExecutor implements CommandExecutor{
 									sender.sendMessage(lockdown + "You need to choose if you want the delay in seconds or minutes! s or m.");
 									return true;
 								} else if (args[2].equalsIgnoreCase("m")){
+									delay = Integer.parseInt(args[1]);
 									for(Player players : Bukkit.getOnlinePlayers()){
 										players.sendMessage(lockdown + gray + "Server has been put in lockdown for " + delay + " minute(s).");
 									}
 									plugin.getConfig().set("Lockdown.On", true);
+									plugin.getConfig().set("Lockdown.Delay", delay * 60);
 									plugin.saveConfig();
 									@SuppressWarnings("unused")
 									BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 1200);
+									
+									@SuppressWarnings("unused")
+									BukkitTask timeTask = new LockdownTimer(plugin).runTaskTimer(plugin, 0L, 20L);
 									return true;
 								} else if (args[2].equalsIgnoreCase("s")){
+									delay = Integer.parseInt(args[1]);
 									for(Player players : Bukkit.getOnlinePlayers()){
 										players.sendMessage(lockdown + gray + "Server has been put in lockdown for " + delay + " second(s).");
 									}
 									plugin.getConfig().set("Lockdown.On", true);
+									plugin.getConfig().set("Lockdown.Delay", delay);
 									plugin.saveConfig();
 									@SuppressWarnings("unused")
 									BukkitTask task = new LockdownTask(plugin).runTaskLater(plugin, delay * 20);
+									
+									@SuppressWarnings("unused")
+									BukkitTask timeTask = new LockdownTimer(plugin).runTaskTimer(plugin, 0L, 20L);
 									//ldt.ldtask = false;
 									return true;
 								}
@@ -288,11 +300,11 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					
 					if (args.length == 1){
 						sender.sendMessage(notenough);
-						sender.sendMessage("Usage: /lockdown auto <time|off>");
+						sender.sendMessage("Usage: /lockdown auto <time|off> <s|m>");
 						return true;
 					} else if (args.length >= 4){
 						sender.sendMessage(toomany);
-						sender.sendMessage("Usage: /lockdown auto <time|off>");
+						sender.sendMessage("Usage: /lockdown auto <time|off> <s|m>");
 						return true;
 					}
 					if (args[1].equalsIgnoreCase("off")){
@@ -338,11 +350,13 @@ public class LockdownCommandExecutor implements CommandExecutor{
 								
 								plugin.getConfig().set("Lockdown.Auto.On", true);
 								plugin.getConfig().set("Lockdown.Auto.Delay", autoDelay * 60);
-								plugin.getConfig().set("Lockdown.Auto.On", true);
 								plugin.saveConfig();
 								
 								@SuppressWarnings("unused")
 								BukkitTask autoTask = new LockdownScheduler(plugin).runTaskTimer(plugin, 0L, 20L);
+								
+								@SuppressWarnings("unused")
+								BukkitTask timeTask = new LockdownTimer(plugin).runTaskTimer(plugin, 0L, 20L);
 								
 								/*for(Player players : Bukkit.getOnlinePlayers()){
 									players.sendMessage(lockdown + gray + "Server has been put in lockdown for " + autoDelay + " minute(s).");
@@ -352,11 +366,13 @@ public class LockdownCommandExecutor implements CommandExecutor{
 								
 								plugin.getConfig().set("Lockdown.Auto.On", true);
 								plugin.getConfig().set("Lockdown.Auto.Delay", autoDelay);
-								plugin.getConfig().set("Lockdown.Auto.On", true);
 								plugin.saveConfig();
 								
 								@SuppressWarnings("unused")
 								BukkitTask autoTask = new LockdownScheduler(plugin).runTaskTimer(plugin, 0L, 20L);
+								
+								@SuppressWarnings("unused")
+								BukkitTask timeTask = new LockdownTimer(plugin).runTaskTimer(plugin, 0L, 20L);
 								
 								/*for(Player players : Bukkit.getOnlinePlayers()){
 									players.sendMessage(lockdown + gray + "Server has been put in lockdown for " + autoDelay + " second(s).");
@@ -385,9 +401,9 @@ public class LockdownCommandExecutor implements CommandExecutor{
 				if(args[0].equalsIgnoreCase("off")){
 					if(sender.hasPermission("lockdown.execute")){
 						if(args.length == 1){
-					    	ldtask = plugin.getConfig().getBoolean("Lockdown.On");
+					    	ldTask = plugin.getConfig().getBoolean("Lockdown.On");
 					    	
-							if (ldtask == true){
+							if (ldTask == true){
 								plugin.getConfig().set("Lockdown.On", false);
 								plugin.saveConfig();
 								
@@ -404,10 +420,35 @@ public class LockdownCommandExecutor implements CommandExecutor{
 						return true;
 					}
 					return false;
-				} else if (args[0].equalsIgnoreCase("something")){
+				} else 
 					
-					return true;
-				}
+				/**
+				 * Timeleft command.	
+				 */
+				if (args[0].equalsIgnoreCase("time")){
+			    	ldTimer = plugin.getConfig().getBoolean("Lockdown.On");
+			    	ldTimerAuto = plugin.getConfig().getBoolean("Lockdown.Auto.On");
+			    	
+			    	if (args.length == 1){
+						if (ldTimer == true||ldTimerAuto == true){
+							plugin.getConfig().set("Lockdown.Time", true);
+							plugin.getConfig().set("Lockdown.Sender", sender.getName());
+							plugin.saveConfig();
+						} else {
+							sender.sendMessage(lockdown + "The prison is not in lockdown!");
+						}
+						return true;
+					} else {
+						sender.sendMessage(toomany);
+						sender.sendMessage(lockdown + "Usage: /lockdown time");
+						return true;
+					}
+						
+				} else
+					
+				/**
+				 * Output plugin information.
+				 */
 				if(args[0].equalsIgnoreCase("info")){
 					if(args.length == 1){
 						String version = plugin.getDescription().getVersion();
@@ -424,6 +465,7 @@ public class LockdownCommandExecutor implements CommandExecutor{
 					}
 					return true;
 				}
+				
 			return false;
 		} //end of lockdown command
 		 //If this has happened the function will return true. 

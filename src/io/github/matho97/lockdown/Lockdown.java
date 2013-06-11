@@ -60,9 +60,9 @@ public class Lockdown extends JavaPlugin implements Listener{
 		getConfig().addDefault(location2, "");
 		//getConfig().addDefault(spawn1, "");
 		//getConfig().addDefault(spawn2, "");
-		getConfig().addDefault("Lockdown.On", "");
-		getConfig().addDefault("Lockdown.Auto.On", "");
-		getConfig().addDefault("Lockdown.Auto.Count", 0);
+		getConfig().set("Lockdown.On", false);
+		getConfig().set("Lockdown.Time", false);
+		getConfig().set("Lockdown.Auto.On", false);
 	    getConfig().options().copyDefaults(true); // NOTE: You do not have to use "plugin." if the class extends the java plugin
 	    //Save the config whenever you manipulate it
 	    saveConfig();

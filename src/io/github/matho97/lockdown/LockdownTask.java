@@ -40,6 +40,7 @@ public class LockdownTask extends BukkitRunnable {
     public String lockdown = red + "[" + gold + "LockDown" + red + "] " + white;
 	
 	public boolean ldtask;
+	public int delay;
  
     public LockdownTask(JavaPlugin plugin) {
         this.plugin = plugin;
